@@ -12,6 +12,11 @@ interface DashboardCardsProps {
   };
 }
 
+type TestProps = {
+  name: string;
+  change: string;
+};
+
 export default function DashboardCards({
   topRising,
   topFalling,
