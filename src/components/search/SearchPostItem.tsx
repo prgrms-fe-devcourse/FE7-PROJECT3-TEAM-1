@@ -1,4 +1,3 @@
-// src/components/search/SearchPostItem.tsx
 "use client";
 
 import Link from "next/link";
@@ -25,7 +24,7 @@ function formatRelativeTime(iso: string) {
 export default function SearchPostItem({ post }: { post: CommunityPost }) {
   const router = useRouter();
 
-  // ✅ 서버에서 계산해 온 is_liked_by_me로 초기 상태 설정
+  // 서버에서 계산해 온 is_liked_by_me로 초기 상태 설정
   const [liked, setLiked] = useState<boolean>(post.is_liked_by_me);
   const [likeCount, setLikeCount] = useState<number>(post.likes_count ?? 0);
   const [pending, setPending] = useState(false);
@@ -60,10 +59,13 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
     }
   };
 
-  // ✅ 사용자 영역 클릭 시 프로필로 이동
+  // 사용자 영역 클릭 시 프로필로 이동
   const handleProfileClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // 부모 Link로의 기본 이동 막기
     e.stopPropagation(); // 상위 클릭 이벤트 막기
+
+    if (!post.user_id) return; // 타입 안전용
+
     router.push(`/profile/${post.user_id}`);
   };
 
