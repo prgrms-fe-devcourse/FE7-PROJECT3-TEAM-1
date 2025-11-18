@@ -373,12 +373,18 @@ export default function WriteDetail() {
   }, [pageId, router, supabase]);
 
   return (
-    <div className="flex justify-center items-center flex-col w-full h-full rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-white p-8 overflow-y-auto">
-      <p className="font-bold pt-4 text-2xl text-[#1A2035]">오늘의 감정 기록</p>
+    <div
+      className="flex justify-center items-center flex-col w-full h-full rounded-2xl 
+    
+    dark:shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:bg-[#141d2b] dark:border-[#364153] shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-white p-8 overflow-y-auto"
+    >
+      <p className="font-bold pt-4 text-2xl text-[#1A2035] dark:text-slate-300">오늘의 감정 기록</p>
 
       {/* 감정 선택 영역 */}
       <div className="flex justify-start items-center flex-col text-base w-full">
-        <p className="text-[#4B5563] mr-auto ml-1 pb-4 mt-4">오늘의 감정은 어떠신가요?</p>
+        <p className="text-[#4B5563] mr-auto ml-1 pb-4 mt-4 dark:text-slate-400">
+          오늘의 감정은 어떠신가요?
+        </p>
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3 w-full text-base">
           {emotions.map((e) => (
@@ -391,12 +397,14 @@ export default function WriteDetail() {
               className={`flex justify-center items-center flex-col flex-1 w-full sm:w-auto min-h-20 rounded-xl cursor-pointer transition-transform duration-200 transform hover:scale-102 py-4
                   ${
                     pick === e.key
-                      ? `border-2 border-[${e.color}] bg-[${e.bg}]`
-                      : "border border-[#E5E7EB] hover:bg-[#E5E7EB]"
+                      ? `border-2 border-[${e.color}] bg-[${e.bg}] dark:border-slate-700 dark:bg-[#141d2b]`
+                      : "border border-[#E5E7EB] hover:bg-[#E5E7EB] dark:border-slate-700 dark:bg-[#141d2b]"
                   }`}
             >
               <Image src={e.img} alt={e.label} />
-              <span style={{ color: e.color }}>{e.label}</span>
+              <span style={{ color: e.color }} className="text-slate-900 dark:text-slate-300">
+                {e.label}
+              </span>
             </button>
           ))}
         </div>
@@ -404,8 +412,8 @@ export default function WriteDetail() {
 
       <div
         className={`transition-all duration-200 w-full ${
-          pick ? "translate-y-6 opacity-100" : "translate-y-0 opacity-0"
-        }`}
+          pick ? "translate-y-6 opacity-100 dark:text-slate-300" : "translate-y-0 opacity-0"
+        } dark:bg-[#141d2b]`}
       >
         {pick ? (
           <div className="relative w-full flex justify-center mb-3 px-2">
@@ -471,21 +479,21 @@ export default function WriteDetail() {
           ""
         )}
         {/* 해시태그 영역 */}
-        <div className="w-full flex flex-row flex-wrap justify-between gap-2 text-[#4A5565] mb-6 px-2">
+        <div className="w-full flex flex-row flex-wrap lg:justify-between gap-2 text-[#4A5565] mb-6 px-2 dark:text-slate-400">
           {hashtags.map((tag) => (
             <button
               key={tag}
               onClick={() => toggleTag(tag)}
-              className={`cursor-pointer px-3 py-1 text-xs border rounded-full transition-colors duration-150 
-                  ${
-                    selectedTags.includes(tag)
-                      ? pick === "up"
-                        ? "bg-[#FF6467] text-white border-[#ff6467]"
-                        : pick === "down"
-                          ? "bg-[#51A2FF] text-white border-[#51A2FF]"
-                          : "bg-[#99A1AF] text-white border-[#99A1AF]"
-                      : "border-[#E5E7EB] text-[#4A5565] hover:text-black hover:bg-black/5"
-                  }`}
+              className={`cursor-pointer px-3 py-1 text-xs border rounded-full transition-colors duration-150 select-none
+                    ${
+                      selectedTags.includes(tag)
+                        ? pick === "up"
+                          ? "bg-[#FF6467] text-white border-[#ff6467] dark:text-white"
+                          : pick === "down"
+                            ? "bg-[#51A2FF] text-white border-[#51A2FF] dark:text-white"
+                            : "bg-[#99A1AF] text-white border-[#99A1AF] dark:text-white"
+                        : "border-[#E5E7EB] text-[#4A5565] hover:text-black hover:bg-black/5 dark:border-slate-700 dark:bg-[#141d2b] dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700"
+                    }`}
             >
               #{tag}
             </button>
@@ -494,36 +502,40 @@ export default function WriteDetail() {
       </div>
 
       {/* 제목 */}
-      <div className="relative w-full">
+      <div className="relative w-full outline-none focus:outline-none select-none ">
         <input
-          className="bg-[#F9FAFB] border rounded-xl border-[#E5E7EB] w-full h-12 mt-4 resize-none outline-none focus:scale-102 transform transition-transform duration-200 px-4"
+          className="bg-[#F9FAFB] border rounded-xl border-[#E5E7EB] w-full h-12 mt-4 resize-none outline-none focus:scale-102 transform transition-transform duration-200 px-4 dark:bg-[#141d2b] dark:border-slate-700 dark:text-slate-300"
           placeholder="오늘의 메모를 남겨보세요..."
           value={title}
           onChange={handleChangeTitle}
         />
-        <span className="absolute bottom-2 right-4 font-normal text-[#AAAAAA] text-sm">
+        <span className="absolute bottom-2 right-4 font-normal text-[#AAAAAA] text-sm dark:text-slate-400">
           {title.length} / 40
         </span>
         {hasBadTitle ? (
-          <p className="mt-0.5 ml-2 absolute text-[#c85c5c] text-sm">적절하지 못한 제목입니다</p>
+          <p className="mt-0.5 ml-2 absolute text-[#c85c5c] text-sm dark:text-slate-400">
+            적절하지 못한 제목입니다
+          </p>
         ) : (
           ""
         )}
       </div>
 
       {/* 메모 */}
-      <div className="relative w-full flex-1 min-h-0">
+      <div className="relative w-full flex-1 min-h-0 outline-none focus:outline-none select-none ">
         <textarea
-          className="bg-[#F9FAFB] border rounded-xl border-[#E5E7EB] w-full h-full min-h-60 mt-4 resize-none outline-none focus:scale-102 transform transition-transform duration-200 px-4 py-3"
+          className="bg-[#F9FAFB] border rounded-xl border-[#E5E7EB] w-full h-full min-h-60 mt-4 resize-none outline-none focus:scale-102 transform transition-transform duration-200 px-4 py-3 dark:bg-[#141d2b] dark:border-slate-700 dark:text-slate-300"
           placeholder="오늘의 메모를 남겨보세요..."
           value={content}
           onChange={handleChangeContent}
         />
-        <span className="absolute bottom-0 right-4 font-normal text-[#AAAAAA] text-sm">
+        <span className="absolute bottom-0 right-4 font-normal text-[#AAAAAA] text-sm dark:text-slate-400">
           {content.length} / 500
         </span>
         {hasBadContent ? (
-          <p className="absolute ml-2 text-[#c85c5c] text-sm">적절하지 못한 내용입니다</p>
+          <p className="absolute ml-2 text-[#c85c5c] text-sm dark:text-slate-400">
+            적절하지 못한 내용입니다
+          </p>
         ) : (
           ""
         )}
@@ -540,7 +552,7 @@ export default function WriteDetail() {
         }}
       />
       <div
-        className="relative group/image mt-10 w-full min-h-[250px] max-h-[250px] rounded-2xl flex justify-center items-center border-2 border-dashed border-gray-300 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors overflow-hidden"
+        className="relative group/image mt-10 w-full min-h-[250px] max-h-[250px] rounded-2xl flex justify-center items-center border-2 border-dashed border-gray-300 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors overflow-hidden dark:bg-[#141d2b] dark:border-slate-700"
         onClick={() => {
           if (!imageUploadPreview) imageUploadInput.current?.click();
         }}
@@ -581,12 +593,14 @@ export default function WriteDetail() {
         ) : (
           <div className="flex flex-col items-center justify-center gap-2">
             <ImagePlus className="w-12 h-12 text-gray-400" />
-            <p className="text-gray-500 text-xl">업로드할 이미지를 선택하세요</p>
+            <p className="text-gray-500 text-xl dark:text-slate-400">
+              업로드할 이미지를 선택하세요
+            </p>
           </div>
         )}
       </div>
       <button
-        className="mt-4 mb-4 flex justify-center items-center text-[#ffffff] w-full h-14 shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] rounded-xl bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] cursor-pointer hover:scale-101 transform transition-transform duration-150 active:scale-[.99] px-2"
+        className="mt-4 mb-4 flex justify-center items-center dark:text-slate-300 text-[#ffffff] w-full h-14 shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] rounded-xl bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] cursor-pointer hover:scale-101 transform transition-transform duration-150 active:scale-[.99] px-2 dark:bg-[#141d2b] dark:border-slate-700 dark:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] dark:from-[#6B8FA3] dark:to-[#7A8FB8]"
         onClick={handlePublish}
       >
         기록 완료

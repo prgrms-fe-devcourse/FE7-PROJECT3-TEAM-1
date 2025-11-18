@@ -10,7 +10,7 @@ export default function Input(props: InputProps) {
         <input
           type={type}
           className={twMerge(
-            "flex items-center gap-2 p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium placeholder:text-slate-500 focus:outline-0 focus:placeholder:text-[0px]",
+            "flex items-center gap-2 p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium placeholder:text-slate-500 focus:outline-0 focus:placeholder:text-[0px] dark:bg-slate-700/50 dark:border-slate-600",
             className,
             paperlogy.className,
           )}

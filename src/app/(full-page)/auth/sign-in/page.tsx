@@ -63,7 +63,7 @@ export default function SignInPage() {
             </Link>
           </h1>
           <div className="flex flex-col gap-2">
-            <h2 className="font-bold text-3xl">업다운에 오신 것을 환영합니다</h2>
+            <h2 className="font-bold text-2xl lg:text-3xl">업다운에 오신 것을 환영합니다</h2>
             <p className="text-slate-700">오늘의 감정을 주식처럼 기록하고 공유하세요</p>
           </div>
           <ul className="flex bg-linear-to-r from-sky-50 to-violet-200 rounded-2xl border border-slate-200 p-6 shadow-lg shadow-slate-200/50">

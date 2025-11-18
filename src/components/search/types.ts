@@ -32,6 +32,8 @@ export type SearchUser = {
   display_name: string;
   image_url?: string | null;
   bio?: string | null;
+  isFollowing: boolean; // 내가 이 사람을 팔로우 중인지
+  isMe: boolean; // 나 자신인지 (나 자신이면 버튼 안 보이게)
 };
 
 export type SearchTag = {

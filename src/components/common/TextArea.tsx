@@ -11,7 +11,7 @@ export default function TextArea(props: TextAreaProps) {
     <>
       <label
         className={twMerge(
-          "flex items-center gap-2 p-4 bg-slate-50 border border-slate-200 text-md rounded-2xl font-medium ",
+          "flex items-center gap-2 p-4 bg-slate-50 border border-slate-200 text-md rounded-2xl font-medium dark:bg-slate-700/50 dark:border-slate-600",
           className,
           paperlogy.className,
         )}

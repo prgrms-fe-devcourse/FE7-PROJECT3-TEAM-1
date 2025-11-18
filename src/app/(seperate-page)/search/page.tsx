@@ -154,8 +154,8 @@ export default function Page() {
   };
 
   return (
-    <section className="mx-auto p-6 flex flex-col gap-6">
-      <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_4px_16px_rgba(15,23,42,0.06)] px-6 py-5 flex flex-col gap-4">
+    <section className="flex flex-col gap-6">
+      <div className="rounded-2xl bg-white border  border-slate-200 shadow-[0_4px_16px_rgba(15,23,42,0.06)] px-6 py-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
         <SearchBar value={input} onChange={setInput} onSubmit={onSubmit} />
         <SearchTabs active={active} counts={counts} onChange={onChangeTab} />
       </div>
@@ -170,14 +170,14 @@ export default function Page() {
             <>
               {/* 사용자 섹션 */}
               {filteredUsers.length > 0 && (
-                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4">
+                <section className="rounded-2xl bg-white border  border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-slate-700 font-semibold">사용자</h3>
+                    <h3 className="text-slate-700 font-semibold dark:text-slate-300">사용자</h3>
                     {filteredUsers.length > 3 && (
                       <button
                         type="button"
                         onClick={() => setShowAllUsers((prev) => !prev)}
-                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-400"
                       >
                         {showAllUsers ? "접기" : "더보기"}
                       </button>
@@ -193,14 +193,14 @@ export default function Page() {
 
               {/* 태그 섹션 */}
               {filteredTags.length > 0 && (
-                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4">
+                <section className="rounded-2xl bg-white border  border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-slate-700 font-semibold">태그</h3>
+                    <h3 className="text-slate-700 font-semibold dark:text-slate-300">태그</h3>
                     {filteredTags.length > 3 && (
                       <button
                         type="button"
                         onClick={() => setShowAllTags((prev) => !prev)}
-                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-400"
                       >
                         {showAllTags ? "접기" : "더보기"}
                       </button>
@@ -216,14 +216,14 @@ export default function Page() {
 
               {/* 게시글 섹션 */}
               {filteredPosts.length > 0 && (
-                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4">
+                <section className="rounded-2xl bg-white border  border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-slate-700 font-semibold">게시글</h3>
+                    <h3 className="text-slate-700 font-semibold dark:text-slate-300">게시글</h3>
                     {filteredPosts.length > 3 && (
                       <button
                         type="button"
                         onClick={() => setShowAllPosts((prev) => !prev)}
-                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-400"
                       >
                         {showAllPosts ? "접기" : "더보기"}
                       </button>
@@ -251,7 +251,7 @@ export default function Page() {
                   dataLength={Math.min(postLimit, filteredPosts.length)}
                   next={() => setPostLimit((prev) => prev + POST_PAGE_SIZE)}
                   hasMore={postLimit < filteredPosts.length}
-                  scrollThreshold={0.95}
+                  scrollThreshold={1}
                   loader={<p className="text-center text-slate-400 py-4">불러오는 중…</p>}
                   endMessage={
                     <p className="text-center text-slate-400 py-4">마지막 게시글입니다.</p>
@@ -279,7 +279,7 @@ export default function Page() {
                   dataLength={Math.min(userLimit, filteredUsers.length)}
                   next={() => setUserLimit((prev) => prev + USER_PAGE_SIZE)}
                   hasMore={userLimit < filteredUsers.length}
-                  scrollThreshold={0.95}
+                  scrollThreshold={1}
                   loader={<p className="text-center text-slate-400 py-4">불러오는 중…</p>}
                   endMessage={
                     <p className="text-center text-slate-400 py-4">마지막 사용자입니다.</p>
@@ -307,7 +307,7 @@ export default function Page() {
                   dataLength={Math.min(tagLimit, filteredTags.length)}
                   next={() => setTagLimit((prev) => prev + TAG_PAGE_SIZE)}
                   hasMore={tagLimit < filteredTags.length}
-                  scrollThreshold={0.95}
+                  scrollThreshold={1}
                   loader={<p className="text-center text-slate-400 py-4">불러오는 중…</p>}
                   endMessage={<p className="text-center text-slate-400 py-4">마지막 태그입니다.</p>}
                 >

@@ -1,11 +1,12 @@
 import { createClient } from "@/utils/supabase/server";
 import { PAGE_SIZE } from "@/utils/helpers";
 import PostListClient from "@/components/community/PostListClient";
+import { Suspense } from "react";
+import PostListSkeleton from "@/components/skeleton/PostListSkeleton";
 
-export default async function Page() {
+async function fetchPostsWithDelay() {
   const supabase = await createClient();
 
-  // 초기 포스트 목록
   const { data: posts, error: listError } = await supabase
     .from("posts")
     .select(
@@ -19,9 +20,26 @@ export default async function Page() {
     return null;
   }
 
+  return posts;
+}
+
+async function PostListWrapper() {
+  const posts = await fetchPostsWithDelay();
+  return <PostListClient initialPosts={posts || []} />;
+}
+
+export default async function Page() {
   return (
-    <>
-      <PostListClient initialPosts={posts} />
-    </>
+    <Suspense
+      fallback={
+        <section className="flex-1 flex flex-col gap-4">
+          {Array.from({ length: 7 }).map((_, index) => (
+            <PostListSkeleton key={index} />
+          ))}
+        </section>
+      }
+    >
+      <PostListWrapper />
+    </Suspense>
   );
 }

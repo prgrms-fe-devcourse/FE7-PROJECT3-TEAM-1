@@ -7,83 +7,44 @@ import commentIcon from "@/assets/alerts/comment.svg";
 import followIcon from "@/assets/alerts/follow.svg";
 import blueDot from "@/assets/alerts/bluepoint.svg";
 import ProfileImage from "../common/ProfileImage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { createClient } from "@/utils/supabase/client";
+import {} from "@/utils/supabase/client";
 import { timeAgo } from "./TimeAgo";
 import { useRouter } from "next/navigation";
+import { useNotificationStore } from "@/store/alarmStore";
 
 export default function AlertsPageClient({
   notifications: initialNotifications,
+  uid,
 }: {
   notifications: Notification[];
+  uid: string;
 }) {
   const router = useRouter();
-  const supabase = createClient();
 
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
+  const notifications = useNotificationStore((s) => s.notifications);
+  const setNotifications = useNotificationStore((s) => s.setNotifications);
+  const setUnReadCount = useNotificationStore((s) => s.setUnReadCount);
+  const markAllRead = useNotificationStore((s) => s.markAllRead);
 
   useEffect(() => {
-    async function subscribeRealtime() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const channel = supabase
-        .channel("notifications-realtime")
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "notifications",
-            filter: `receiver_id=eq.${user.id}`,
-          },
-          async (payload) => {
-            const inserted = payload.new as Notification;
-            const { data: rows } = await supabase
-              .from("notifications")
-              .select(
-                `
-              id,
-              type,
-              post_id,
-              is_read,
-              created_at,
-              sender: sender_id (
-              id,
-              display_name,
-              image_url
-              ),
-              post:post_id (
-              id,
-              comments()
-              ),
-              comment:comment_id (
-              id,
-              content
-              )
-            `,
-              )
-              .eq("id", inserted.id)
-              .single();
-            if (!rows) return;
-            const newN = rows as unknown as Notification;
-            setNotifications((prev) => [newN, ...prev]);
-          },
-        )
-        .subscribe((state) => console.log(state));
-      return () => {
-        supabase.removeChannel(channel);
-      };
+    if (initialNotifications) {
+      setNotifications(initialNotifications);
+      setUnReadCount(initialNotifications.filter((n) => !n.is_read).length);
     }
-    subscribeRealtime();
-  }, [supabase]);
+  }, [initialNotifications, setNotifications, setUnReadCount]);
 
   const handleClick = async (n: Notification) => {
-    setNotifications((prev) =>
-      prev.map((item) => (item.id === n.id ? { ...item, is_read: true } : item)),
+    setNotifications(
+      notifications.map((i) =>
+        i.id === n.id
+          ? {
+              ...i,
+              is_read: true,
+            }
+          : i,
+      ),
     );
 
     await fetch("api/notifications/read", {
@@ -99,11 +60,9 @@ export default function AlertsPageClient({
   };
 
   const allRead = async () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
-    await fetch("/api/notifications/read-all", {
-      method: "POST",
-    });
+    await markAllRead(uid);
   };
+
   const getMessage = (n: Notification) => {
     const name = n.sender.display_name;
     switch (n.type) {
@@ -122,22 +81,22 @@ export default function AlertsPageClient({
 
       {/* 상단 버튼 */}
       <div className="flex justify-between items-center mt-3">
-        <p className="text-[16px] text-[#4A5565] pt-3">
+        <p className="text-[16px] text-[#4A5565] pt-3 dark:text-slate-300">
           {notifications.filter((n) => !n.is_read).length}개의 읽지 않은 알림이 있습니다.
         </p>
 
         <button
           onClick={allRead}
-          className="w-36 h-[38px] border border-[#d7d7da] rounded-xl text-[14px] font-bold text-[#364153] cursor-pointer active:scale-97 transition hover:opacity-80"
+          className="w-36 h-[38px] border border-[#d7d7da]  dark:border-slate-700 dark:bg-[#141d2b] dark:text-slate-300 rounded-xl text-[14px] font-bold text-[#364153] cursor-pointer active:scale-97 transition hover:opacity-80"
         >
           모두 읽음으로 표시
         </button>
       </div>
 
       {/* 알림 리스트 */}
-      <div className="overflow-hidden mt-6 border border-[#e3e3e6] rounded-2xl bg-white divide-y divide-[#f2f2f4] shadow-[0px_4px_12px_rgba(0,0,0,0.06)]">
+      <div className="overflow-hidden mt-6 border border-[#e3e3e6] rounded-2xl bg-white divide-y divide-[#f2f2f4] dark:border-slate-700 dark:bg-[#141d2b] dark:divide-slate-700 shadow-[0px_4px_12px_rgba(0,0,0,0.06)]">
         {notifications.length === 0 ? (
-          <div className="flex justify-center items-center font-bold text-[40px] py-20">
+          <div className="flex justify-center items-center font-bold text-[40px] py-20 dark:text-slate-300">
             받은 알림이 없습니다
           </div>
         ) : (
@@ -147,7 +106,7 @@ export default function AlertsPageClient({
               onClick={() => handleClick(n)}
               className={`
                 flex justify-between items-center w-full px-6 py-4 text-left transition cursor-pointer hover:opacity-80 active:scale-[.99]
-                ${n.is_read ? "bg-white" : "bg-[#EFF6FF]"}
+                ${n.is_read ? "bg-white dark:bg-[#141d2b]" : "bg-[#EFF6FF] dark:bg-[#141d2b]"}
               `}
             >
               {/* 왼쪽 */}
@@ -168,8 +127,10 @@ export default function AlertsPageClient({
                 />
 
                 <div className="flex flex-col">
-                  <p className="text-[15px] text-[#1A1A1A]">{getMessage(n)}</p>
-                  <p className="text-[13px] text-[#6A7282]">{timeAgo(n.created_at)}</p>
+                  <p className="text-[15px] text-[#1A1A1A] dark:text-slate-100">{getMessage(n)}</p>
+                  <p className="text-[13px] text-[#6A7282] dark:text-slate-300">
+                    {timeAgo(n.created_at)}
+                  </p>
                 </div>
               </div>
 

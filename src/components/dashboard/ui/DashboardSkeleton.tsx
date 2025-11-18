@@ -1,6 +1,6 @@
 export default function DashboardSkeleton() {
   return (
-    <div className="w-full h-full bg-gray-50 p-6 animate-pulse dark:bg-[#141c2c]">
+    <div className="w-full h-full bg-gray-50 animate-pulse dark:bg-[#141c2c]">
       <div className="w-full space-y-6">
         {/* 상단  */}
         <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 dark:bg-[#141c2c]">

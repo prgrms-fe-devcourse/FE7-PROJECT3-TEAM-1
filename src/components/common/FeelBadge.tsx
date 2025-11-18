@@ -23,12 +23,6 @@ const feelConfig = {
   },
 };
 
-const sizeClasses = {
-  sm: "px-2 py-0.5 text-xs gap-0.5",
-  md: "px-3 py-1 text-sm gap-1",
-  lg: "px-4 py-2 text-base gap-2",
-};
-
 export default function FeelBadge({
   type,
   className = "",
@@ -44,11 +38,13 @@ export default function FeelBadge({
         "flex justify-center items-center font-medium rounded-2xl",
         config.bgColor,
         config.textColor,
-        sizeClasses[size],
         className,
+        "px-2 py-0.5 text-xs gap-0.5",
+        "md:px-3 md:py-1 md:text-sm md:gap-1",
+        "xl:px-4 xl:py-2 xl:text-base xl:gap-2",
       )}
     >
-      {showIcon && <Icon size={size === "sm" ? 16 : size === "lg" ? 24 : 20} />}
+      {showIcon && <Icon className={twMerge("w-4 h-4", "md:w-5 md:h-5", "lg:w-6 lg:h-6")} />}
       <span>{config.label}</span>
     </div>
   );

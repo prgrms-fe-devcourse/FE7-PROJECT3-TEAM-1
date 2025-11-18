@@ -1,3 +1,4 @@
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { setTrendTagsRank } from "@/utils/helpers";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";

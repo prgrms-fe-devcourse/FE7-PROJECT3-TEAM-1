@@ -11,6 +11,7 @@ import FeelBadge from "@/components/common/FeelBadge";
 import { CommunityPost } from "./types";
 import type { FeelType as CoreFeelType } from "@/types/community";
 import { togglePostLike } from "@/features/likes/api/togglePostLike";
+import { getHashtagArray } from "@/utils/helpers";
 
 // 간단한 상대시간 헬퍼(추후 utils로 교체 가능)
 function formatRelativeTime(iso: string) {
@@ -25,6 +26,8 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
   const [liked, setLiked] = useState<boolean>(post.is_liked_by_me);
   const [likeCount, setLikeCount] = useState<number>(post.likes_count ?? 0);
   const [pending, setPending] = useState(false);
+
+  const hashtags = getHashtagArray(post.tags);
 
   const likeHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -57,14 +60,16 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
   const feel: CoreFeelType = (post.feels?.[0]?.type?.toLowerCase?.() ?? "hold") as CoreFeelType;
 
   return (
-    <article className="p-5 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-white border border-slate-200">
+    <article className="p-5 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-white border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">
       <Link href={`/community/${post.id}`}>
         <div className="flex gap-4 pb-5">
           <ProfileImage displayName={post.users.display_name} imageUrl={post.users.image_url} />
           <div className="flex-1 flex flex-col gap-4">
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-0.5">
-                <strong className="font-semibold text-slate-800">{post.users.display_name}</strong>
+                <strong className="font-semibold text-slate-800 dark:text-gray-300">
+                  {post.users.display_name}
+                </strong>
                 <span className="text-slate-400 text-xs">
                   {formatRelativeTime(post.created_at)}
                 </span>
@@ -73,18 +78,20 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="text-xl font-bold">{post.title}</h3>
-              <p className="line-clamp-1 font-medium text-slate-700">{post.content}</p>
+              <h3 className="text-xl font-bold dark:text-gray-300">{post.title}</h3>
+              <p className="line-clamp-1 font-medium text-slate-700 dark:text-gray-400">
+                {post.content}
+              </p>
             </div>
 
-            {post.tags && post.tags.length > 0 && (
-              <div className="flex gap-2">
-                {post.tags.map((t) => (
+            {hashtags && (
+              <div className="flex gap-2 flex-wrap">
+                {hashtags.map((tag) => (
                   <span
-                    key={t}
-                    className="px-2 py-1 rounded-2xl bg-slate-200 text-xs text-slate-600"
+                    key={tag}
+                    className="px-2 py-1 rounded-2xl dark:bg-gray-700 dark:text-gray-300 bg-slate-200 text-xs text-slate-600"
                   >
-                    #{t}
+                    #{tag}
                   </span>
                 ))}
               </div>
@@ -92,20 +99,25 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
           </div>
         </div>
 
-        <div className="flex gap-5 border-t border-slate-200 pt-5">
-          <Button onClick={likeHandler} disabled={pending}>
+        <div className="flex gap-5 border-t border-slate-200 pt-5 dark:border-[#364153]">
+          <Button onClick={likeHandler}>
             <Heart
               size={18}
               className={twMerge(
                 "transition-transform active:scale-125",
-                liked ? "stroke-red-500 fill-red-500" : "stroke-slate-300 fill-slate-300",
+                liked
+                  ? "stroke-red-500 fill-red-500"
+                  : "stroke-slate-300 fill-slate-300 dark:stroke-[#b2b7c2] dark:fill-[#b2b7c2]",
               )}
             />
-            {likeCount}
+            {likeCount ?? "0"}
           </Button>
           <Button>
-            <MessageCircle size={16} className="stroke-slate-300 fill-slate-300" />
-            {post.comments_count}
+            <MessageCircle
+              size={16}
+              className="stroke-slate-300 fill-slate-300 dark:stroke-[#b2b7c2] dark:fill-[#b2b7c2]"
+            />
+            {post.comments_count ?? "0"}
           </Button>
         </div>
       </Link>

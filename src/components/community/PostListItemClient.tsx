@@ -83,7 +83,7 @@ export default function PostListItemClient({
           </div>
           <div className="flex-1 flex flex-col gap-4">
             {/* 사용자 닉네임, 작성시간, 글 타입 */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-start">
               <div className="flex flex-col gap-0.5">
                 <strong className="font-semibold text-slate-800 dark:text-gray-300">
                   {post.users.display_name}
@@ -101,7 +101,7 @@ export default function PostListItemClient({
               </p>
             </div>
             {hashtags && (
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {hashtags.map((tag) => (
                   <span
                     key={tag}

@@ -65,7 +65,7 @@ export default async function FollowersPage({
   }
 
   return (
-    <main className="min-h-screen w-full px-6 py-6 space-y-6">
+    <main className="min-h-screen w-full space-y-6">
       <section className="rounded-2xl bg-white p-6 shadow-sm">
         <h1 className="text-lg font-semibold text-slate-900">
           {profile.display_name ?? "사용자"}님의 팔로워

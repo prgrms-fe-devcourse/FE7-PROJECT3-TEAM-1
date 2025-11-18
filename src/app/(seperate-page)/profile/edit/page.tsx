@@ -1,29 +1,26 @@
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
-import EditClient from './EditClient';
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import EditClient from "./EditClient";
 
 export default async function ProfileEditPage() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect('/auth/sign-in');
+  if (!user) redirect("/auth/sign-in");
 
   const { data: me } = await supabase
-    .from('users')
-    .select('id, display_name, bio, image_url')
-    .eq('id', user.id)
+    .from("users")
+    .select("id, display_name, bio, image_url")
+    .eq("id", user.id)
     .maybeSingle();
 
   return (
-    <main className="min-h-screen w-full px-6 py-8">
-      <EditClient
-        userId={user.id}
-        nameInit={me?.display_name ?? ''}
-        bioInit={me?.bio ?? ''}
-        avatarInit={me?.image_url ?? null}
-      />
-    </main>
+    <EditClient
+      userId={user.id}
+      nameInit={me?.display_name ?? ""}
+      bioInit={me?.bio ?? ""}
+      avatarInit={me?.image_url ?? null}
+    />
   );
-} 
- 
+}

@@ -1,8 +1,9 @@
-import { AlertCircle, ArrowLeft, Link } from "lucide-react";
+import { AlertCircle, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function AuthCodeError() {
   return (
-    <div className="max-w-md mx-auto mt-16">
+    <div className="max-w-md mx-auto pt-16">
       <div className="space-y-8">
         <div className="text-center space-y-6">
           <div className="flex justify-center">
@@ -12,27 +13,27 @@ export default function AuthCodeError() {
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-3xl font-light tracking-tight">Login Failed</h1>
-            <p className="text-gray-400 text-sm">We couldn`t sign you in. Please try again.</p>
+            <h1 className="text-3xl font-bold tracking-tight">로그인에 실패했습니다.</h1>
+            <p className="text-slate-400 text-sm">로그인할 수 없습니다. 다시 시도해 주세요.</p>
           </div>
         </div>
 
-        <div className="border border-gray-800 rounded-lg p-6 bg-gray-900/30">
+        <div className="border border-slate-200 rounded-lg p-6 bg-white">
           <div className="space-y-4">
             <div className="space-y-2">
-              <h2 className="text-sm font-medium text-gray-300">Common issues:</h2>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <h2 className="text-sm font-medium text-slate-900">일반적인 문제:</h2>
+              <ul className="space-y-2 text-sm text-slate-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-gray-600 mt-0.5">•</span>
-                  <span>Your account credentials may be incorrect</span>
+                  <span className="text-slate-600 mt-0.5">•</span>
+                  <span>계정 정보가 올바르지 않을 수 있습니다</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-gray-600 mt-0.5">•</span>
-                  <span>Network connection issues</span>
+                  <span className="text-slate-600 mt-0.5">•</span>
+                  <span>네트워크 연결 문제</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-gray-600 mt-0.5">•</span>
-                  <span>Third-party authentication service unavailable</span>
+                  <span className="text-slate-600 mt-0.5">•</span>
+                  <span>외부 인증 서비스를 사용할 수 없음</span>
                 </li>
               </ul>
             </div>
@@ -40,23 +41,25 @@ export default function AuthCodeError() {
         </div>
 
         <div className="flex flex-col gap-3">
+          {/* TODO: /login말고 다른경로로 */}
           <a
             href="/login"
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-white text-black hover:bg-gray-200 transition-colors text-sm font-medium"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-slate-200 bg-white text-black hover:bg-slate-200/50 transition-colors text-sm font-medium"
           >
-            Try Again
+            다시 시도하기
           </a>
-
           <Link
             href="/"
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-gray-700 hover:border-gray-600 hover:bg-gray-800/50 transition-all text-sm"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-slate-200 hover:bg-slate-200/50 transition-all text-sm"
           >
             <ArrowLeft size={16} />
-            Go to Home
+            홈으로 돌아가기
           </Link>
         </div>
 
-        <p className="text-center text-xs text-gray-500">Need help? Contact our support team</p>
+        <p className="text-center text-xs text-slate-500">
+          도움이 필요하신가요? 고객지원팀에 문의해 주세요
+        </p>
       </div>
     </div>
   );

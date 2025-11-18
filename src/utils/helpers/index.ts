@@ -42,9 +42,14 @@ export function setTrendTagsRank(
 }
 
 // 해시태그 배열로 변환
-export function getHashtagArray(hashtags: { content: string }[]) {
-  if (hashtags.length > 0 && hashtags[0].content !== "") {
-    return hashtags[0].content.split(",");
+export function getHashtagArray(hashtags: { content: string }[] | string[]) {
+  if (hashtags.length > 0) {
+    if (typeof hashtags[0] === "string" && hashtags[0] !== "") {
+      return hashtags[0].split(",");
+    }
+    if (typeof hashtags[0] === "object" && hashtags[0].content !== "") {
+      return hashtags[0].content.split(",");
+    }
   }
   return null;
 }

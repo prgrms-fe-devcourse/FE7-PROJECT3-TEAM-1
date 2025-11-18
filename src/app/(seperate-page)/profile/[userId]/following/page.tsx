@@ -10,12 +10,7 @@ type UserRow = {
   image_url: string | null;
 };
 
-export default async function FollowingPage({
-  params,
-}: {
-  params: Promise<{ userId: string }>;
-}) {
-  
+export default async function FollowingPage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId: profileUserId } = await params;
 
   const supabase = await createClient();
@@ -48,8 +43,7 @@ export default async function FollowingPage({
     console.error("[following] follows error:", followsErr);
   }
 
-  const followingIds =
-    followRows?.map((r) => r.following_id).filter(Boolean) ?? [];
+  const followingIds = followRows?.map((r) => r.following_id).filter(Boolean) ?? [];
 
   let followingUsers: UserRow[] = [];
 
@@ -67,20 +61,17 @@ export default async function FollowingPage({
   }
 
   return (
-    <main className="min-h-screen w-full px-6 py-6 space-y-6">
+    <main className="min-h-screen w-full space-y-6">
       {/* 상단 제목 */}
       <section className="rounded-2xl bg-white p-6 shadow-sm">
         <h1 className="text-lg font-semibold text-slate-900">
           {profile.display_name ?? "사용자"}님의 팔로잉
         </h1>
         <p className="mt-1 text-sm text-slate-500">
-          총{" "}
-          <span className="font-semibold">{followingUsers.length}</span>명을
-          팔로우하고 있어요.
+          총 <span className="font-semibold">{followingUsers.length}</span>명을 팔로우하고 있어요.
         </p>
       </section>
 
-     
       <section className="rounded-2xl bg-white p-6 shadow-sm">
         {followingUsers.length === 0 ? (
           <div className="py-10 text-center text-sm text-slate-400">
@@ -111,9 +102,7 @@ export default async function FollowingPage({
                       </div>
                     </div>
 
-                    <span className="text-xs font-medium text-violet-500">
-                      프로필 보기 →
-                    </span>
+                    <span className="text-xs font-medium text-violet-500">프로필 보기 →</span>
                   </div>
                 </Link>
               </li>

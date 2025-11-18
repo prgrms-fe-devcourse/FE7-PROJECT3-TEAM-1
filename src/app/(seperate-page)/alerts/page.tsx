@@ -1,8 +1,10 @@
 import AlertsPageClient from "@/components/alerts/AlertsPageClient";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import AlertsPageSkeleton from "@/components/skeleton/AlertsPageSkeleton";
 
-export default async function AlertsPage() {
+async function fetchNotifications() {
   const supabase = await createClient();
 
   const {
@@ -22,10 +24,10 @@ export default async function AlertsPage() {
   post_id,
   is_read,
   created_at,
-  sender:sender_id (
-    id,
-    display_name,
-    image_url
+  sender: users!sender_id (
+  id,
+  display_name,
+  image_url
   ),
   post:post_id (
   id
@@ -39,7 +41,20 @@ comment:comment_id (
     .eq("receiver_id", user.id)
     .order("created_at", { ascending: false });
 
-  const notifications = (data ?? []) as unknown as Notification[];
+  const notifications = (data ?? []) as Notification[];
 
-  return <AlertsPageClient notifications={notifications} />;
+  return notifications;
+}
+
+async function AlertsPageWrapper() {
+  const notifications = await fetchNotifications();
+  return <AlertsPageClient uid={user.id} notifications={notifications} />;
+}
+
+export default async function AlertsPage() {
+  return (
+    <Suspense fallback={<AlertsPageSkeleton />}>
+      <AlertsPageWrapper />
+    </Suspense>
+  );
 }

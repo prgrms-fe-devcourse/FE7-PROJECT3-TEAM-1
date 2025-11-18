@@ -287,18 +287,24 @@ export default function DashboardChart({ chartData }: DashboardChartProps) {
           ))}
         </div>
         {/* 차트 색상 표시 영역 */}
-        <div className="flex gap-4 pr-2 select-none">
-          <div className="flex items-center gap-2">
+        <div className="flex pr-2 select-none gap-2 sm:gap-4">
+          <div className="flex items-center gap-1 sm:gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <span className="text-sm text-gray-600 font-medium dark:text-gray-400">UP</span>
+            <span className="text-xs sm:text-sm text-gray-600 font-medium dark:text-gray-400">
+              UP
+            </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-            <span className="text-sm text-gray-600 font-medium dark:text-gray-400">DOWN</span>
+            <span className="text-xs sm:text-sm text-gray-600 font-medium dark:text-gray-400">
+              DOWN
+            </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <div className="w-3 h-3 rounded-full bg-black"></div>
-            <span className="text-sm text-gray-600 font-medium dark:text-gray-400">HOLD</span>
+            <span className="text-xs sm:text-sm text-gray-600 font-medium dark:text-gray-400">
+              HOLD
+            </span>
           </div>
         </div>
       </div>

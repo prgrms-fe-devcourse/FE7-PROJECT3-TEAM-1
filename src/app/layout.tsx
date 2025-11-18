@@ -12,7 +12,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning className="text-[14px] lg:text-[16px]">
       <body className={paperlogy.className}>
         {/* 실시간 접속자 관리를 위한 Provider */}
         <PresenceProvider channelName="dashboard">

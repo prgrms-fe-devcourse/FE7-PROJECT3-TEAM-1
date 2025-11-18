@@ -129,8 +129,8 @@ export default function EditClient({
   };
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#eef3ff_0%,#f4f6fb_40%,#eef2fa_100%)]">
-      <header className="mx-auto w-full max-w-5xl px-4 pt-8">
+    <>
+      <div className="mx-auto w-full max-w-5xl px-4 pt-8">
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/profile")}
@@ -142,7 +142,7 @@ export default function EditClient({
 
           <h1 className="ml-1 text-2xl font-semibold text-slate-800">프로필 수정</h1>
         </div>
-      </header>
+      </div>
 
       <input
         ref={fileInputRef}
@@ -259,6 +259,6 @@ export default function EditClient({
           </div>
         </form>
       </section>
-    </div>
+    </>
   );
 }

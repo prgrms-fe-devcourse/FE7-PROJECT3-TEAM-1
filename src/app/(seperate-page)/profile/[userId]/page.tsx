@@ -162,7 +162,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
 
   console.log("writtenPostsRaw", writtenPostsRaw);
   return (
-    <div className="w-full px-6 py-6 space-y-6">
+    <div className="w-full space-y-6">
       <section className="rounded-2xl bg-white p-6 shadow-sm border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">
         <ProfileHeader
           isMe={isMe}
