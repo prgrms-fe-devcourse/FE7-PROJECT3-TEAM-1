@@ -43,12 +43,12 @@ comment:comment_id (
 
   const notifications = (data ?? []) as Notification[];
 
-  return notifications;
+  return { notifications, uid: user.id };
 }
 
 async function AlertsPageWrapper() {
-  const notifications = await fetchNotifications();
-  return <AlertsPageClient uid={user.id} notifications={notifications} />;
+  const { notifications, uid } = await fetchNotifications();
+  return <AlertsPageClient uid={uid} notifications={notifications} />;
 }
 
 export default async function AlertsPage() {
