@@ -10,6 +10,12 @@ import SearchPostItem from "@/components/search/SearchPostItem";
 import SearchUserItem from "@/components/search/SearchUserItem";
 import SearchTagItem from "@/components/search/SearchTagItem";
 
+import {
+  SearchUserListSkeleton,
+  SearchTagListSkeleton,
+  SearchPostListSkeleton,
+} from "@/components/skeleton/SearchSkeleton";
+
 import { fetchPostsWithLikes } from "@/features/search/api/fetchPosts";
 import { fetchUsers } from "@/features/search/api/fetchUsers";
 import { fetchTags } from "@/features/search/api/fetchTags";
@@ -39,7 +45,6 @@ export default function Page() {
   const [showAllTags, setShowAllTags] = useState(false);
   const [showAllPosts, setShowAllPosts] = useState(false);
 
-  // 무한 스크롤: 페이지 크기 및 현재 노출 개수
   const POST_PAGE_SIZE = 10;
   const USER_PAGE_SIZE = 10;
   const TAG_PAGE_SIZE = 15;
@@ -48,7 +53,7 @@ export default function Page() {
   const [userLimit, setUserLimit] = useState(USER_PAGE_SIZE);
   const [tagLimit, setTagLimit] = useState(TAG_PAGE_SIZE);
 
-  // 데이터 최초 로드 (병렬)
+  // 최초 로딩
   useEffect(() => {
     (async () => {
       try {
@@ -57,7 +62,6 @@ export default function Page() {
 
         const supabase = createClient();
 
-        // 현재 로그인한 유저
         const {
           data: { user },
           error: userError,
@@ -69,14 +73,12 @@ export default function Page() {
 
         const userId = user?.id ?? null;
 
-        // posts + likes + users + tags 병렬 로드
         const [{ posts: rawPosts, likes }, u, t] = await Promise.all([
           fetchPostsWithLikes(),
           fetchUsers(),
           fetchTags(),
         ]);
 
-        // mapper에서 likes + userId 를 이용해 is_liked_by_me 계산
         setPosts(rawPosts.map((row) => mapRowToCommunityPost(row, likes, userId)));
         setUsers(u.map(mapRowToSearchUser));
         setTags(t.map(mapRowToSearchTag));
@@ -92,7 +94,6 @@ export default function Page() {
     })();
   }, []);
 
-  // URL 동기화
   const updateUrl = (nextQ: string, nextTab: Tab) => {
     const url =
       `/search${nextQ || nextTab !== "posts" ? "?" : ""}` +
@@ -102,10 +103,8 @@ export default function Page() {
     window.history.replaceState(null, "", url);
   };
 
-  // 검색 제출
   const onSubmit = () => updateUrl(input, active);
 
-  // 탭 변경
   const onChangeTab = (t: Tab) => {
     setActive(t);
     updateUrl(input, t);
@@ -113,7 +112,7 @@ export default function Page() {
 
   const needle = q.toLowerCase();
 
-  // 검색어가 바뀌면 무한 스크롤 노출 개수 리셋
+  // 검색어가 바뀌면 무한 스크롤 개수 리셋
   useEffect(() => {
     setPostLimit(POST_PAGE_SIZE);
     setUserLimit(USER_PAGE_SIZE);
@@ -155,17 +154,58 @@ export default function Page() {
 
   return (
     <section className="flex flex-col gap-6">
+      {/* 검색창 + 탭 */}
       <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_4px_16px_rgba(15,23,42,0.06)] px-6 py-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
         <SearchBar value={input} onChange={setInput} onSubmit={onSubmit} />
         <SearchTabs active={active} counts={counts} onChange={onChangeTab} />
       </div>
 
-      {loading && <p className="text-slate-400">불러오는 중…</p>}
+      {/* 🔹 로딩 중: 탭에 맞는 스켈레톤 표시 (여기서 '전체' 탭도 처리) */}
+      {loading && !err && (
+        <div className="flex flex-col gap-6">
+          {/* ✨ 전체(all) 탭: 사용자/태그/게시글 섹션 스켈레톤 모두 노출 */}
+          {active === "all" && (
+            <>
+              {/* 사용자 섹션 스켈레톤 */}
+              <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-slate-700 font-semibold">사용자</h3>
+                </div>
+                <SearchUserListSkeleton count={3} />
+              </section>
+
+              {/* 태그 섹션 스켈레톤 */}
+              <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-slate-700 font-semibold">태그</h3>
+                </div>
+                <SearchTagListSkeleton count={6} />
+              </section>
+
+              {/* 게시글 섹션 스켈레톤 */}
+              <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-slate-700 font-semibold">게시글</h3>
+                </div>
+                <SearchPostListSkeleton count={3} />
+              </section>
+            </>
+          )}
+
+          {/* 단일 탭 스켈레톤들 */}
+          {active === "posts" && <SearchPostListSkeleton count={POST_PAGE_SIZE} />}
+          {active === "users" && <SearchUserListSkeleton count={USER_PAGE_SIZE} />}
+          {active === "tags" && <SearchTagListSkeleton count={TAG_PAGE_SIZE} />}
+        </div>
+      )}
+
+      {/* 에러 */}
       {err && <p className="text-red-500">오류: {err}</p>}
 
+      {/* 🔹 실제 데이터 렌더링 (로딩 끝 + 에러 없음일 때) */}
       {!loading && !err && (
         <div className="flex flex-col gap-6">
-          {/* 전체(all) 탭일 때: 3개 섹션 모두 표시 */}
+          {/* ✨ 전체(all) 탭: 3개 섹션 함께 노출 */}
           {active === "all" && (
             <>
               {/* 사용자 섹션 */}
@@ -239,7 +279,7 @@ export default function Page() {
             </>
           )}
 
-          {/* 단일 탭 - 게시글 (무한 스크롤) */}
+          {/* 게시글 탭 단독 */}
           {active === "posts" && (
             <>
               {filteredPosts.length === 0 ? (
@@ -267,7 +307,7 @@ export default function Page() {
             </>
           )}
 
-          {/* 단일 탭 - 사용자 (무한 스크롤) */}
+          {/* 사용자 탭 단독 */}
           {active === "users" && (
             <>
               {filteredUsers.length === 0 ? (
@@ -295,7 +335,7 @@ export default function Page() {
             </>
           )}
 
-          {/* 단일 탭 - 태그 (무한 스크롤) */}
+          {/* 태그 탭 단독 */}
           {active === "tags" && (
             <>
               {filteredTags.length === 0 ? (
