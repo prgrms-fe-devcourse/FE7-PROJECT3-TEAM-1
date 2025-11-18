@@ -19,7 +19,7 @@ export default function SeperateLayoutClient({
       <AlarmProvider />
 
       <Header initialProfile={userProfile} todayScore={todayScore} />
-      <main className="flex-1 p-6 pt-25 xl:pt-6">{children}</main>
+      <main className="flex-1 p-6 pt-25 xl:pt-6 overflow-y-auto">{children}</main>
     </div>
   );
 }
