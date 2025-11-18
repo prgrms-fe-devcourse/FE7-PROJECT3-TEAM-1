@@ -57,14 +57,18 @@ export default function SignInPage() {
                 alt="logo"
                 width={224}
                 height={89}
-                className="object-contain"
+                className="object-contain dark:invert"
                 priority
               />
             </Link>
           </h1>
           <div className="flex flex-col gap-2">
-            <h2 className="font-bold text-2xl lg:text-3xl">업다운에 오신 것을 환영합니다</h2>
-            <p className="text-slate-700">오늘의 감정을 주식처럼 기록하고 공유하세요</p>
+            <h2 className="font-bold text-2xl lg:text-3xl text-slate-900 dark:text-gray-100">
+              업다운에 오신 것을 환영합니다
+            </h2>
+            <p className="text-slate-700 dark:text-gray-400">
+              오늘의 감정을 주식처럼 기록하고 공유하세요
+            </p>
           </div>
           <ul className="flex bg-linear-to-r from-sky-50 to-violet-200 rounded-2xl border border-slate-200 p-6 shadow-lg shadow-slate-200/50">
             <li className="flex-1 flex flex-col items-center gap-2">
@@ -89,7 +93,9 @@ export default function SignInPage() {
         </div>
 
         <div className="flex flex-col gap-5 p-8 rounded-2xl shadow-lg shadow-slate-200/50 bg-white border border-slate-200">
-          <h3 className="text-lg font-bold">소셜 계정으로 시작하기</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-gray-400">
+            소셜 계정으로 시작하기
+          </h3>
           <form aria-label="로그인 폼">
             <fieldset className="flex flex-col gap-4 min-w-100">
               <Button
@@ -130,7 +136,7 @@ export default function SignInPage() {
 
         <div className="flex flex-col items-center gap-5 p-8 rounded-2xl shadow-lg shadow-slate-200/50 bg-white border border-slate-200">
           <Quote className="stroke-slate-900 fill-slate-900" />
-          <div className="">
+          <div className="text-slate-900 dark:text-gray-400">
             <p>감정은 늘 변하지만, 아무도 그 변화를 기록하지 않는다.</p>
             <span className="text-slate-500">─ UpDown 개미들의 철학</span>
           </div>
