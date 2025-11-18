@@ -26,8 +26,7 @@ export async function fetchDashboardData(currentUsers?: number): Promise<Dashboa
   oneDayAgo.setDate(oneDayAgo.getDate() - 1);
   oneDayAgo.setHours(0, 0, 0, 0);
 
-
-  // 포스트, 댓글, 해시태그, 감정
+  // 포스트(오늘), 댓글(오늘), 해시태그(전체), 감정(전체)
   const [
     postsResult,
     commentsResult,
