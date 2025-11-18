@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 
 export default async function PostDetail({ postId }: { postId: string }) {
   const supabase = await createClient();
@@ -36,7 +37,13 @@ export default async function PostDetail({ postId }: { postId: string }) {
   const hashtags = getHashtagArray(post.hashtags);
 
   return (
-    <section className="p-10 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-white border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">
+    <section
+      className={twMerge(
+        "rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-white border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]",
+        "xl:p-10",
+        "p-5",
+      )}
+    >
       <div className="flex flex-col gap-6">
         <div className="flex gap-4">
           {/* 사용자 프로필 사진 */}

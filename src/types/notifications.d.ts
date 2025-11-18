@@ -1,12 +1,12 @@
 interface Notification {
   id: string;
-  type: "like" | "comment" | "follow"; // string 말고 리터럴로 명확히
+  type: "like" | "comment" | "follow";
   post_id: string | null;
   is_read: boolean;
   created_at: string;
   sender: Sender;
   post: Post | null;
-  comment: Comment | null;
+  comment: NotificationComment | null; // ← 변경
 }
 
 interface Sender {
@@ -19,7 +19,7 @@ interface Post {
   id: string;
 }
 
-interface Comment {
+interface NotificationComment {
   id: string;
   content: string;
 }

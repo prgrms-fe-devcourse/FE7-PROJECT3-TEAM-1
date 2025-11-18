@@ -94,11 +94,11 @@ export default function DashboardContentWrapper({ initialData }: DashboardConten
       <button
         onClick={handleRefresh}
         disabled={isRefreshing}
-        className="fixed bottom-8 right-8 z-50 bg-white hover:bg-white disabled:bg-gray-200 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed flex items-center justify-center group"
+        className="fixed bottom-8 right-8 z-50 bg-white hover:bg-white disabled:bg-gray-200 text-white dark:bg-[#313b4b] dark:hover:bg-[#141d2b] dark:disabled:bg-[#364153] rounded-full p-4 shadow-lg transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed flex items-center justify-center group"
         aria-label="새로고침"
       >
         <RefreshCcw
-          className={`w-6 h-6 transition-transform duration-500 text-black ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`}
+          className={`w-6 h-6 transition-transform duration-500 text-black dark:text-slate-300 ${isRefreshing ? "animate-spin" : "group-hover:rotate-180"}`}
         />
       </button>
     </div>

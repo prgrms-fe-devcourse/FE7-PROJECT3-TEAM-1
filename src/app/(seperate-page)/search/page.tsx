@@ -143,7 +143,6 @@ export default function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      {/* 검색창, 탭 */}
       <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_4px_16px_rgba(15,23,42,0.06)] px-6 py-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
         <SearchBar value={input} onChange={setInput} onSubmit={onSubmit} />
         <SearchTabs active={active} counts={counts} onChange={onChangeTab} />
@@ -190,13 +189,14 @@ export default function Page() {
             <>
               {/* 사용자 섹션 */}
               {filteredUsers.length > 0 && (
-                <section className="rounded-2xl bg-white border p-5 dark:bg-[#141827] dark:border-[#181d2a]">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-semibold text-slate-700 dark:text-gray-300">사용자</h3>
+                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-slate-700 font-semibold">사용자</h3>
                     {filteredUsers.length > 3 && (
                       <button
-                        onClick={() => setShowAllUsers((p) => !p)}
-                        className="text-xs text-slate-500 hover:text-slate-700"
+                        type="button"
+                        onClick={() => setShowAllUsers((prev) => !prev)}
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
                       >
                         {showAllUsers ? "접기" : "더보기"}
                       </button>
@@ -212,13 +212,14 @@ export default function Page() {
 
               {/* 태그 섹션 */}
               {filteredTags.length > 0 && (
-                <section className="rounded-2xl bg-white border p-5 dark:bg-[#141827] dark:border-[#181d2a]">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-semibold text-slate-700 dark:text-gray-300">태그</h3>
+                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-slate-700 font-semibold">태그</h3>
                     {filteredTags.length > 3 && (
                       <button
-                        onClick={() => setShowAllTags((p) => !p)}
-                        className="text-xs text-slate-500 hover:text-slate-700"
+                        type="button"
+                        onClick={() => setShowAllTags((prev) => !prev)}
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
                       >
                         {showAllTags ? "접기" : "더보기"}
                       </button>
@@ -234,13 +235,14 @@ export default function Page() {
 
               {/* 게시글 섹션 */}
               {filteredPosts.length > 0 && (
-                <section className="rounded-2xl bg-white border p-5 dark:bg-[#141827] dark:border-[#181d2a]">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-semibold text-slate-700 dark:text-gray-300">게시글</h3>
+                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-slate-700 font-semibold">게시글</h3>
                     {filteredPosts.length > 3 && (
                       <button
-                        onClick={() => setShowAllPosts((p) => !p)}
-                        className="text-xs text-slate-500 hover:text-slate-700"
+                        type="button"
+                        onClick={() => setShowAllPosts((prev) => !prev)}
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
                       >
                         {showAllPosts ? "접기" : "더보기"}
                       </button>

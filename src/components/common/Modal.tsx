@@ -22,7 +22,7 @@ export function Modal({ className, children }: { className?: string; children: R
   return (
     <>
       <div
-        className="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-[rgba(0,0,0,0.3)] z-40 backdrop-blur-sm"
+        className="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-[rgba(0,0,0,0.3)] z-80 backdrop-blur-sm"
         onClick={(e) => {
           if (e.target === e.currentTarget) closeModal();
         }}

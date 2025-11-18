@@ -92,31 +92,37 @@ export default function SignUpClient({
       <div className="grid grid-cols-2 gap-2 w-full h-2 text-[0px]">
         <div
           className={twMerge(
-            "rounded-4xl shadow-xs shadow-slate-300",
-            isDone ? "bg-slate-200" : "bg-linear-to-b from-sky-100 to-violet-200 ",
+            "rounded-4xl shadow-xs shadow-slate-300 dark:shadow-slate-900/50",
+            isDone
+              ? "bg-slate-200 dark:bg-slate-700"
+              : "bg-linear-to-b from-sky-100 to-violet-200 dark:from-[#6B8FA3] dark:to-[#7A8FB8]",
           )}
         >
           프로필 설정 단계
         </div>
         <div
           className={twMerge(
-            "rounded-4xl shadow-xs shadow-slate-300",
-            !isDone ? "bg-slate-200" : "bg-linear-to-b from-sky-100 to-violet-200 ",
+            "rounded-4xl shadow-xs shadow-slate-300 dark:shadow-slate-900/50",
+            !isDone
+              ? "bg-slate-200 dark:bg-slate-700"
+              : "bg-linear-to-b from-sky-100 to-violet-200 dark:from-[#6B8FA3] dark:to-[#7A8FB8]",
           )}
         >
           시작하기
         </div>
       </div>
       <div className="flex flex-col gap-5 items-center text-center">
-        <div className="flex justify-center items-center w-20 h-20 rounded-full bg-linear-to-r from-sky-200 to-violet-300">
+        <div className="flex justify-center items-center w-20 h-20 rounded-full bg-linear-to-r from-sky-200 to-violet-300 dark:from-[#6B8FA3] dark:to-[#7A8FB8]">
           <Image src="/logo/ant.svg" width={40} height={40} alt="업다운로고" />
         </div>
         <div className="space-y-2">
           <h2 className="text-3xl font-bold">환영합니다!</h2>
-          <p className="text-slate-500">감정 시장 업다운의 새로운 개미가 되신 것을 환영합니다.</p>
+          <p className="text-slate-500  dark:text-slate-400">
+            감정 시장 업다운의 새로운 개미가 되신 것을 환영합니다.
+          </p>
         </div>
       </div>
-      <div className="flex flex-col gap-5 p-8 rounded-2xl shadow-lg shadow-slate-200/50 bg-white border border-slate-200">
+      <div className="flex flex-col gap-5 p-8 rounded-2xl shadow-lg shadow-slate-200/50 bg-white border border-slate-200 dark:bg-[#101828] dark:border-slate-700/20 dark:shadow-slate-900/50">
         <Activity mode={isDone ? "hidden" : "visible"}>
           <div className="flex items-center gap-4">
             <div className="flex justify-center items-center w-10 h-10 rounded-full text-blue-500 bg-blue-100">
@@ -130,8 +136,11 @@ export default function SignUpClient({
           <form onSubmit={handleForm}>
             <fieldset className="flex flex-col gap-4">
               <div className="flex gap-2 flex-col">
-                <label htmlFor="display_name" className="text-sm font-bold text-slate-900">
-                  이름<span className="text-red-500">*</span>
+                <label
+                  htmlFor="display_name"
+                  className="text-sm font-bold text-slate-900 dark:text-slate-200"
+                >
+                  이름 <span className="text-red-500">*</span>
                 </label>
                 <Input
                   className="w-full text-md"
@@ -144,7 +153,10 @@ export default function SignUpClient({
                 <p className="text-right text-xs text-slate-500">{displayNameCount}/20</p>
               </div>
               <div className="flex gap-2 flex-col">
-                <label htmlFor="display_name" className="text-sm font-bold text-slate-900">
+                <label
+                  htmlFor="display_name"
+                  className="text-sm font-bold text-slate-900 dark:text-slate-200"
+                >
                   자기소개
                 </label>
                 <TextArea
@@ -166,28 +178,34 @@ export default function SignUpClient({
         </Activity>
         <Activity mode={isDone ? "visible" : "hidden"}>
           <div className="text-center">
-            <h2 className="text-2xl font-bold">거의 다 왔어요!</h2>
-            <p className="text-center text-slate-600">입력하신 정보를 확인해주세요.</p>
+            <h2 className="text-2xl font-bold dark:text-slate-200">거의 다 왔어요!</h2>
+            <p className="text-center text-slate-600 dark:text-slate-400">
+              입력하신 정보를 확인해주세요.
+            </p>
           </div>
-          <div className="flex flex-col p-6 bg-slate-50 rounded-2xl gap-4">
+          <div className="flex flex-col p-6 border border-slate-50 bg-slate-50 rounded-2xl gap-4 dark:bg-[#141d2b] dark:border-[#364153]">
             <div className="flex items-center gap-4">
               <ProfileImage displayName={displayName} imageUrl={userImage} />
               <div className="flex flex-col gap-0.5 flex-1">
-                <strong className="text-xl text-slate-900 font-bold">{displayName}</strong>
-                <p className="text-sm text-slate-700">{bio || "작성한 자기소개가 없습니다."}</p>
+                <strong className="text-xl text-slate-900 font-bold dark:text-slate-50">
+                  {displayName}
+                </strong>
+                <p className="text-sm text-slate-700 dark:text-slate-400">
+                  {bio || "작성한 자기소개가 없습니다."}
+                </p>
               </div>
             </div>
             <ul className="pt-4 border-t border-slate-200 grid grid-cols-3 text-center gap-3">
               <li>
-                <p className="text-xl font-bold text-slate-900">0</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-slate-50">0</p>
                 <strong className="text-xs font-medium text-slate-500">게시글</strong>
               </li>
               <li>
-                <p className="text-xl font-bold text-slate-900">0</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-slate-50">0</p>
                 <strong className="text-xs font-medium text-slate-500">팔로잉</strong>
               </li>
               <li>
-                <p className="text-xl font-bold text-slate-900">0</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-slate-50">0</p>
                 <strong className="text-xs font-medium text-slate-500">팔로워</strong>
               </li>
             </ul>

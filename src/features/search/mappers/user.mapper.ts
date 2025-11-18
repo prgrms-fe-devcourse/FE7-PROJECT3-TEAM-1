@@ -6,4 +6,6 @@ export const mapRowToSearchUser = (r: DBUserRow): SearchUser => ({
   display_name: r.display_name,
   image_url: r.image_url,
   bio: r.bio,
+  isFollowing: false,
+  isMe: false,
 });

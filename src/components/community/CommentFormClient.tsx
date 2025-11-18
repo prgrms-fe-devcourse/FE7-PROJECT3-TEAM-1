@@ -77,7 +77,7 @@ export default function CommentFormClient({
   return (
     <>
       {!profile && (
-        <p className="py-7 text-center bg-slate-100 border border-slate-200 rounded-2xl font-medium text-slate-500">
+        <p className="py-7 text-center bg-slate-100 border border-slate-200 rounded-2xl font-medium text-slate-500 dark:bg-[#141d2b] dark:border-[#364153] dark:text-slate-500">
           회원만 댓글 작성 권한이 있습니다.
         </p>
       )}

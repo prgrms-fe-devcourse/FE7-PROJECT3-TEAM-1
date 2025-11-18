@@ -73,75 +73,75 @@ export default function ProfileHeader({ isMe, profile }: Props) {
 
   return (
     <section className="w-full">
-      <div className="flex items-start justify-between gap-6">
-        <div className="flex items-start gap-5">
-          <ProfileImage displayName={profile.name} imageUrl={profile.avatar ?? ""} size="xl" />
-
-          <div className="pt-1">
-            <h1 className="text-[22px] font-bold text-slate-900 dark:text-gray-300">
-              {profile.name}
-            </h1>
-            <p className="mt-1 text-[13px] leading-5 text-slate-500 dark:text-gray-400">
-              {profile.bio || " "}
-            </p>
-
-            <div className="mt-3 flex items-center gap-6 text-[13px]">
-              <Stat
-                icon={<Users className="h-4 w-4 text-slate-500 dark:text-gray-400" aria-hidden />}
-                label="팔로워"
-                value={profile.followerCount}
-                onClick={() => router.push(`/profile/${profile.id}/followers`)}
-              />
-              <Stat
-                icon={
-                  <UserCheck className="h-4 w-4 text-slate-500 dark:text-gray-400" aria-hidden />
-                }
-                label="팔로잉"
-                value={profile.followingCount}
-                onClick={() => router.push(`/profile/${profile.id}/following`)}
-              />
-              <Stat
-                icon={
-                  <PenSquare className="h-4 w-4 text-slate-500 dark:text-gray-400" aria-hidden />
-                }
-                label="작성글"
-                value={profile.postCount}
-              />
+      <div className="flex-1 flex items-start gap-5">
+        <ProfileImage displayName={profile.name} imageUrl={profile.avatar ?? ""} size="xl" />
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex justify-between">
+            <div className="pt-1">
+              <h1 className="text-[22px] font-bold text-slate-900 dark:text-gray-300">
+                {profile.name}
+              </h1>
+              <p className="mt-1 text-[13px] leading-5 text-slate-500 dark:text-gray-400">
+                {profile.bio || " "}
+              </p>
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              {isMe ? (
+                <>
+                  <Button
+                    variant="edit"
+                    className="px-3 py-1 min-w-20"
+                    style={
+                      isDarkMode ? { backgroundColor: "#e2e6ec", color: "#1e2939" } : undefined
+                    }
+                    onClick={() =>
+                      router.push(`/profile/edit?mode=edit&return=/profile/${profile.id}`)
+                    }
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    variant="common"
+                    className="px-3 py-1 min-w-20"
+                    style={isDarkMode ? { color: "#e2e6ec" } : undefined}
+                    onClick={handleSignOut}
+                    disabled={signOutPending}
+                  >
+                    {signOutPending ? "로그아웃 중…" : "로그아웃"}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant={following ? "common" : "edit"}
+                  className="px-4 py-1.5 text-sm"
+                  onClick={handleFollowToggle}
+                  disabled={followPending}
+                >
+                  {followPending ? "처리 중..." : following ? "언팔로우" : "팔로우"}
+                </Button>
+              )}
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col items-end gap-2">
-          {isMe ? (
-            <>
-              <Button
-                variant="edit"
-                className="px-3 py-1 min-w-20"
-                style={isDarkMode ? { backgroundColor: "#e2e6ec", color: "#1e2939" } : undefined}
-                onClick={() => router.push(`/profile/edit?mode=edit&return=/profile/${profile.id}`)}
-              >
-                수정
-              </Button>
-              <Button
-                variant="common"
-                className="px-3 py-1 min-w-20"
-                style={isDarkMode ? { color: "#e2e6ec" } : undefined}
-                onClick={handleSignOut}
-                disabled={signOutPending}
-              >
-                {signOutPending ? "로그아웃 중…" : "로그아웃"}
-              </Button>
-            </>
-          ) : (
-            <Button
-              variant={following ? "common" : "edit"}
-              className="px-4 py-1.5 text-sm"
-              onClick={handleFollowToggle}
-              disabled={followPending}
-            >
-              {followPending ? "처리 중..." : following ? "언팔로우" : "팔로우"}
-            </Button>
-          )}
+          <div className="mt-3 flex items-center gap-6 text-[13px]">
+            <Stat
+              icon={<Users className="h-4 w-4 text-slate-500 dark:text-gray-400" aria-hidden />}
+              label="팔로워"
+              value={profile.followerCount}
+              onClick={() => router.push(`/profile/${profile.id}/followers`)}
+            />
+            <Stat
+              icon={<UserCheck className="h-4 w-4 text-slate-500 dark:text-gray-400" aria-hidden />}
+              label="팔로잉"
+              value={profile.followingCount}
+              onClick={() => router.push(`/profile/${profile.id}/following`)}
+            />
+            <Stat
+              icon={<PenSquare className="h-4 w-4 text-slate-500 dark:text-gray-400" aria-hidden />}
+              label="작성글"
+              value={profile.postCount}
+            />
+          </div>
         </div>
       </div>
     </section>

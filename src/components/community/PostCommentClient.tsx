@@ -36,7 +36,9 @@ export default function PostCommentClient({
 
   return (
     <div>
-      <h3 className="font-semibold text-xl mb-6">댓글 {comments?.length}</h3>
+      <p className="font-semibold text-xl mb-6 text-slate-900 dark:text-slate-300 dark:bg-[#141d2b] dark:border-[#364153]">
+        댓글 {comments?.length}
+      </p>
       <CommentFormClient
         profile={profile}
         postId={postId}

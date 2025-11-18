@@ -17,12 +17,12 @@ import {
   PenTool,
   X,
   Menu,
-  LogIn,
 } from "lucide-react";
 import type { Database } from "@/utils/supabase/supabase";
 import { twMerge } from "tailwind-merge";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import Button from "./Button";
+import ProfileImage from "./ProfileImage";
 
 type Profile = Database["public"]["Tables"]["users"]["Row"];
 
@@ -131,7 +131,7 @@ export default function Header({
           "fixed top-0 left-0 w-full h-18 bg-white/85 backdrop-blur-2xl shadow-sm flex justify-center items-center z-61",
           "xl:hidden", // 데스크탑에서 숨김
           visible && "bg-white",
-          "dark:bg-[#101828]",
+          "dark:bg-[#101828] dark:border-b dark:border-slate-700",
         )}
       >
         {/* Logo */}
@@ -149,15 +149,14 @@ export default function Header({
             priority
           />
         </Link>
-        <Button className="absolute left-6 text-black" onClick={headerHandler}>
+        <Button className="absolute left-6 text-black dark:text-slate-200" onClick={headerHandler}>
           {visible ? <X /> : <Menu />}
         </Button>
       </header>
       <div
         className={twMerge(
-          isXl
-            ? "pl-4 py-6 sticky top-0 bottom-6 h-dvh w-full min-w-64 max-w-64"
-            : "fixed top-0 right-0 bottom-0 left-0 -z-60",
+          "xl:z-0 xl:pl-4 xl:py-6 xl:sticky xl:top-0 xl:bottom-6 xl:h-dvh xl:w-full xl:min-w-64 xl:max-w-64",
+          "fixed top-0 right-0 bottom-0 left-0 -z-60",
           !isXl && visible && "bg-slate-900/30 backdrop-blur-xs z-60",
           className,
         )}
@@ -165,14 +164,14 @@ export default function Header({
       >
         <aside
           className={twMerge(
-            "h-full flex-col p-4 gap-4 shadow-sm",
+            "h-full flex-col p-4 gap-4 shadow-sm ",
             "shrink-0",
             "font-semibold",
-            isXl && "flex rounded-lg bg-white/85 backdrop-blur", // 반응형 작업
-            !isXl && (visible ? "flex" : "hidden"),
-            !isXl && "bg-white w-4/5 min-w-2 max-w-200 pt-25",
+            "xl:pt-4 xl:min-w-60 xl:max-w-60 xl:flex xl:rounded-lg xl:bg-white/85 xl:backdrop-blur", // 반응형 작업
+            visible ? "flex" : "hidden",
+            "bg-white w-4/5 max-w-200 pt-25",
             isMobile && "w-full min-w-auto max-w-auto",
-            "dark:bg-[#101828]",
+            "dark:bg-[#101828] dark:border-r dark:border-slate-700",
           )}
           aria-label="헤더"
           onClick={(e) => e.stopPropagation()}
@@ -254,14 +253,7 @@ export default function Header({
               })}
             </ul>
           </nav>
-          <button
-            onClick={() => setIsDark((prev) => !prev)}
-            className="p-2 rounded-xl transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-            aria-label="Toggle Theme"
-          >
-            <Sun className="h-6 w-6 hidden dark:block dark:text-gray-400" />
-            <Moon className="h-6 w-6 block dark:hidden text-black" />
-          </button>
+
           {/* 하단 CTA & 프로필 */}
           <div className="mt-auto flex flex-col gap-6 dark:bg-[#101828]">
             {/* CTA 버튼 */}
@@ -278,41 +270,50 @@ export default function Header({
             <hr className="border-t border-gray-200 dark:border-[#364153]" />
 
             {/* 프로필 영역 & 테마 토글 */}
-            {userProfile && (
-              <Link href="/profile">
-                <div className="flex items-center gap-3 px-1 py-2 rounded-2xl transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-600">
-                  <div className="h-10 w-10 shrink-0 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center">
-                    {userProfile?.image_url && userProfile.image_url.trim() !== "" ? (
-                      <Image
-                        src={userProfile.image_url}
-                        alt={`${userProfile.display_name} 프로필`}
-                        width={40}
-                        height={40}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <UserIcon className="h-6 w-6 text-gray-500" />
-                    )}
-                  </div>
-
-                  <div className="flex flex-col justify-center">
-                    <p className="text-[14px] font-bold text-black leading-tight dark:text-gray-400">
-                      {userProfile ? userProfile.display_name : "Unknown"}
-                    </p>
-                  </div>
+            <div className="flex justify-between items-center pl-3 py-2 rounded-2xl">
+              {userProfile && (
+                <div className="flex items-center gap-3 flex-1 rounded-lg px-2 py-1 -ml-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <ProfileImage
+                    displayName={userProfile.display_name}
+                    imageUrl={userProfile?.image_url}
+                    className="w-10 h-10 shrink-0"
+                  />
+                  <Link
+                    href="/profile"
+                    className="flex-1 rounded-lg px-2 py-1 -ml-2 transition-colors duration-200"
+                  >
+                    <div className="flex flex-col justify-center">
+                      <p className="text-[14px] font-bold text-black leading-tight dark:text-gray-400">
+                        {userProfile ? userProfile.display_name : "Unknown"}
+                      </p>
+                    </div>
+                  </Link>
                 </div>
-              </Link>
-            )}
-            {!userProfile && (
-              <Link
-                href="/profile"
-                onClick={handleLinkClick}
-                className="flex justify-center items-center gap-3 h-14 rounded-2xl transition-colors duration-200 hover:bg-gray-100 border border-slate-200 text-slate-700 font-bold text-sm dark:border-[#364153] dark:text-gray-300 dark:hover:bg-[#1e2939]"
+              )}
+              {!userProfile && (
+                <div className="flex items-center gap-3 flex-1 rounded-lg px-2 py-1 -ml-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <UserIcon className="h-6 w-6 text-gray-500 shrink-0" />
+                  <Link
+                    href="/profile"
+                    className="flex-1 rounded-lg px-2 py-1 -ml-2 transition-colors duration-200"
+                  >
+                    <div className="flex flex-col justify-center">
+                      <p className="text-[14px] font-bold text-black leading-tight dark:text-gray-400">
+                        로그인
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              )}
+              <button
+                onClick={() => setIsDark((prev) => !prev)}
+                className="p-2 rounded-xl transition-colors duration-200 cursor-pointer"
+                aria-label="Toggle Theme"
               >
-                <LogIn size={16} />
-                로그인
-              </Link>
-            )}
+                <Sun className="h-6 w-6 hidden  rounded-lg dark:block dark:text-gray-400 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800" />
+                <Moon className="h-6 w-6 block  rounded-lg dark:hidden text-black transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800" />
+              </button>
+            </div>
           </div>
         </aside>
       </div>
