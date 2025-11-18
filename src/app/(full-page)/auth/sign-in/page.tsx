@@ -101,6 +101,7 @@ export default function SignInPage() {
               <Button
                 className="gap-3 py-4 bg-slate-900 text-white font-bold"
                 onClick={githubLogin}
+                type="button"
               >
                 <GithubIcon className="w-5 h-5" />
                 <span className="min-w-30">GitHub로 계속하기</span>
@@ -108,6 +109,7 @@ export default function SignInPage() {
               <Button
                 className="gap-3 py-4 border border-slate-300 text-slate-900 font-bold"
                 onClick={googleLogin}
+                type="button"
               >
                 <GoogleIcon className="w-5 h-5" />
                 <span className="min-w-30">Google로 계속하기</span>
@@ -115,6 +117,7 @@ export default function SignInPage() {
               <Button
                 className="gap-3 py-4 bg-blue-600 text-white font-bold"
                 onClick={discordLogin}
+                type="button"
               >
                 <DiscordIcon className="w-5 h-5" />
                 <span className="min-w-30">Discord로 계속하기</span>
