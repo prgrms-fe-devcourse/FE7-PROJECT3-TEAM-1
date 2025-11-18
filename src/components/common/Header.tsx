@@ -270,55 +270,50 @@ export default function Header({
             <hr className="border-t border-gray-200 dark:border-[#364153]" />
 
             {/* 프로필 영역 & 테마 토글 */}
-            {userProfile && (
-              <div className="flex justify-between items-center pl-3 py-2 rounded-2xl transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Link href="/profile" className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <ProfileImage
-                      displayName={userProfile.display_name}
-                      imageUrl={userProfile?.image_url}
-                      className="w-10 h-10"
-                    />
-
+            <div className="flex justify-between items-center pl-3 py-2 rounded-2xl">
+              {userProfile && (
+                <div className="flex items-center gap-3 flex-1 rounded-lg px-2 py-1 -ml-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <ProfileImage
+                    displayName={userProfile.display_name}
+                    imageUrl={userProfile?.image_url}
+                    className="w-10 h-10 shrink-0"
+                  />
+                  <Link
+                    href="/profile"
+                    className="flex-1 rounded-lg px-2 py-1 -ml-2 transition-colors duration-200"
+                  >
                     <div className="flex flex-col justify-center">
                       <p className="text-[14px] font-bold text-black leading-tight dark:text-gray-400">
                         {userProfile ? userProfile.display_name : "Unknown"}
                       </p>
                     </div>
-                  </div>
-                </Link>
-                <button
-                  onClick={() => setIsDark((prev) => !prev)}
-                  className="p-2 rounded-xl transition-colors duration-200 cursor-pointer"
-                  aria-label="Toggle Theme"
-                >
-                  <Sun className="h-6 w-6 hidden dark:block dark:text-gray-400" />
-                  <Moon className="h-6 w-6 block dark:hidden text-black" />
-                </button>
-              </div>
-            )}
-            {!userProfile && (
-              <div className="flex justify-between items-center pl-3 py-2 rounded-2xl transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Link href="/profile" className="flex-1">
-                  <div className="flex items-center gap-3 ">
-                    <UserIcon className="h-6 w-6 text-gray-500" />
+                  </Link>
+                </div>
+              )}
+              {!userProfile && (
+                <div className="flex items-center gap-3 flex-1 rounded-lg px-2 py-1 -ml-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <UserIcon className="h-6 w-6 text-gray-500 shrink-0" />
+                  <Link
+                    href="/profile"
+                    className="flex-1 rounded-lg px-2 py-1 -ml-2 transition-colors duration-200"
+                  >
                     <div className="flex flex-col justify-center">
                       <p className="text-[14px] font-bold text-black leading-tight dark:text-gray-400">
                         로그인
                       </p>
                     </div>
-                  </div>
-                </Link>
-                <button
-                  onClick={() => setIsDark((prev) => !prev)}
-                  className="p-2 rounded-xl transition-colors duration-200 cursor-pointer"
-                  aria-label="Toggle Theme"
-                >
-                  <Sun className="h-6 w-6 hidden dark:block dark:text-gray-400" />
-                  <Moon className="h-6 w-6 block dark:hidden text-black" />
-                </button>
-              </div>
-            )}
+                  </Link>
+                </div>
+              )}
+              <button
+                onClick={() => setIsDark((prev) => !prev)}
+                className="p-2 rounded-xl transition-colors duration-200 cursor-pointer"
+                aria-label="Toggle Theme"
+              >
+                <Sun className="h-6 w-6 hidden  rounded-lg dark:block dark:text-gray-400 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800" />
+                <Moon className="h-6 w-6 block  rounded-lg dark:hidden text-black transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800" />
+              </button>
+            </div>
           </div>
         </aside>
       </div>
