@@ -221,7 +221,7 @@ export default function Header({
                   {todayScore.value.toLocaleString()}
                 </span>
                 <span
-                  className={`inline-flex shrink-0 items-center gap-1 rounded-lg font-semibold backdrop-blur bg-transparent px-0 py-0 text-[14px] ${
+                  className={`mb-0.5 inline-flex shrink-0 ite ms-center gap-1 rounded-lg font-semibold backdrop-blur bg-transparent px-0 py-0 text-[14px] ${
                     todayScore.finalResult >= 0 ? "text-emerald-500" : "text-rose-500"
                   }`}
                 >
