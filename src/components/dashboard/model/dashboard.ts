@@ -11,6 +11,22 @@ export async function fetchDashboardData(currentUsers?: number): Promise<Dashboa
   const now = new Date(); // 오늘 날짜 담는 변수
   const supabase = await createClient();
 
+  // 오늘 날짜 시작 
+  const todayStart = new Date(now);
+  todayStart.setHours(0, 0, 0, 0);
+  const todayStartISO = todayStart.toISOString();
+
+  // 오늘 날짜 끝 
+  const todayEnd = new Date(now);
+  todayEnd.setHours(23, 59, 59, 999);
+  const todayEndISO = todayEnd.toISOString();
+
+  // 하루 전 
+  const oneDayAgo = new Date(now);
+  oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+  oneDayAgo.setHours(0, 0, 0, 0);
+
+
   // 포스트, 댓글, 해시태그, 감정
   const [
     postsResult,
@@ -20,10 +36,14 @@ export async function fetchDashboardData(currentUsers?: number): Promise<Dashboa
   ] = await Promise.all([
     supabase
       .from("posts")
-      .select<"*", Post>("*", { count: "exact", head: true }),
+      .select<"*", Post>("*", { count: "exact", head: true })
+      .gte("created_at", todayStartISO)
+      .lte("created_at", todayEndISO),
     supabase
       .from("comments")
-      .select<"*", Comment>("*", { count: "exact", head: true }),
+      .select<"*", Comment>("*", { count: "exact", head: true })
+      .gte("created_at", todayStartISO)
+      .lte("created_at", todayEndISO),
     supabase
       .from("hashtags")
       .select<"*", Hashtag>("*"),
@@ -88,14 +108,6 @@ export async function fetchDashboardData(currentUsers?: number): Promise<Dashboa
   const fallingHashtagCounts = new Map<string, number>();
   const previousFallingHashtagCounts = new Map<string, number>();
 
-  // 하루 전 날짜 계산
-  const oneDayAgo = new Date(now);
-  oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-  oneDayAgo.setHours(0, 0, 0, 0);
-
-  // 오늘 날짜 계산
-  const todayStart = new Date(now);
-  todayStart.setHours(0, 0, 0, 0);
 
   if (process.env.NODE_ENV === 'development') {
     console.log("hashtags 데이터 개수:", hashtagsData?.length || 0);

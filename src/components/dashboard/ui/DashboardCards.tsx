@@ -85,7 +85,7 @@ const DashboardCards = memo(function DashboardCards({
             </span>
           </li>
           <li className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
-            <span className="text-gray-700 dark:text-gray-400">댓글</span>
+            <span className="text-gray-700 dark:text-gray-400">새로운 댓글</span>
             <span className="text-indigo-400 font-semibold select-none">
               {communityStats.comments}
             </span>
