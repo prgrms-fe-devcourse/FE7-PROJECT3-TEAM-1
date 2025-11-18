@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Heart, MessageCircle } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import Button from "@/components/common/Button";
@@ -22,6 +23,8 @@ function formatRelativeTime(iso: string) {
 }
 
 export default function SearchPostItem({ post }: { post: CommunityPost }) {
+  const router = useRouter();
+
   // ✅ 서버에서 계산해 온 is_liked_by_me로 초기 상태 설정
   const [liked, setLiked] = useState<boolean>(post.is_liked_by_me);
   const [likeCount, setLikeCount] = useState<number>(post.likes_count ?? 0);
@@ -57,6 +60,13 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
     }
   };
 
+  // ✅ 사용자 영역 클릭 시 프로필로 이동
+  const handleProfileClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // 부모 Link로의 기본 이동 막기
+    e.stopPropagation(); // 상위 클릭 이벤트 막기
+    router.push(`/profile/${post.user_id}`);
+  };
+
   const feel: CoreFeelType = (post.feels?.[0]?.type?.toLowerCase?.() ?? "hold") as CoreFeelType;
 
   return (
@@ -64,16 +74,23 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
       <Link href={`/community/${post.id}`}>
         <div className="flex gap-4 pb-5">
           <ProfileImage displayName={post.users.display_name} imageUrl={post.users.image_url} />
+
           <div className="flex-1 flex flex-col gap-4">
             <div className="flex justify-between items-center">
-              <div className="flex flex-col gap-0.5">
+              {/* ⬇️ 이 영역을 버튼으로 만들어 프로필 이동 */}
+              <button
+                type="button"
+                onClick={handleProfileClick}
+                className="flex flex-col gap-0.5 text-left cursor-pointer"
+              >
                 <strong className="font-semibold text-slate-800 dark:text-gray-300">
                   {post.users.display_name}
                 </strong>
                 <span className="text-slate-400 text-xs">
                   {formatRelativeTime(post.created_at)}
                 </span>
-              </div>
+              </button>
+
               <FeelBadge type={feel} />
             </div>
 

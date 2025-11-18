@@ -53,7 +53,7 @@ export default function Page() {
   const [userLimit, setUserLimit] = useState(USER_PAGE_SIZE);
   const [tagLimit, setTagLimit] = useState(TAG_PAGE_SIZE);
 
-  // 📌 최초 로딩
+  // 최초 로딩
   useEffect(() => {
     (async () => {
       try {
