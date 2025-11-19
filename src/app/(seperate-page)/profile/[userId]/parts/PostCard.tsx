@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { MessageCircle, Eye, Lock, Heart } from "lucide-react";
+import { MessageCircle, Eye, Lock, Heart, ArrowUp, ArrowDown, ArrowRight } from "lucide-react";
+import FeelBadge from "@/components/common/FeelBadge";
 
 type Tag = { id?: string | number; label: string } | string;
 
@@ -14,6 +15,7 @@ export default function PostCard({
   likeCount,
   commentCount,
   tags = [],
+  post_type,
 }: {
   id: string | number;
   createdAt: string;
@@ -22,6 +24,7 @@ export default function PostCard({
   likeCount: number;
   commentCount: number;
   tags?: Tag[];
+  post_type?: string | null;
 }) {
   const vis =
     visibility === "public" ? (
@@ -50,7 +53,11 @@ export default function PostCard({
       <article className="rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md cursor-pointer border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">
         <header className="mb-3 flex items-center justify-between text-xs text-slate-500 dark:text-gray-400">
           <div className="flex items-center gap-2">
-            <span className="inline-block h-4 w-4 rounded bg-rose-100" aria-hidden />
+            {post_type && (
+              <>
+                <FeelBadge type={post_type as "up" | "down" | "hold"} size="sm" />
+              </>
+            )}
             <span>{dateLabel}</span>
           </div>
           {vis}

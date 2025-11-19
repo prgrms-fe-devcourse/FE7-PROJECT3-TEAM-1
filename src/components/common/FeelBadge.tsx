@@ -27,7 +27,7 @@ export default function FeelBadge({
   type,
   className = "",
   showIcon = true,
-  size = "md",
+  size = "md", // md, sm, lg, xl
 }: FeelBadgeProps) {
   const config = feelConfig[type];
   const Icon = config.icon;
@@ -40,8 +40,9 @@ export default function FeelBadge({
         config.textColor,
         className,
         "px-2 py-0.5 text-xs gap-0.5",
-        "md:px-3 md:py-1 md:text-sm md:gap-1",
-        "xl:px-4 xl:py-2 xl:text-base xl:gap-2",
+        size === "sm" && "sm:px-2 sm:py-0.5 sm:text-xs sm:gap-1",
+        size === "md" && "md:px-3 md:py-1 md:text-sm md:gap-1",
+        size === "lg" && "lg:px-4 lg:py-2 lg:text-base lg:gap-2",
       )}
     >
       {showIcon && <Icon className={twMerge("w-4 h-4", "md:w-5 md:h-5", "lg:w-6 lg:h-6")} />}

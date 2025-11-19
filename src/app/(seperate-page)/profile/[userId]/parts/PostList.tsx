@@ -12,6 +12,7 @@ type RawPost = {
   comments_count?: number | null;
   hashtags?: { content: string }[] | null;
   likes?: { user_id: string }[] | null;
+  post_type?: string | null;
 };
 
 export default function PostList({
@@ -33,6 +34,7 @@ export default function PostList({
       likeCount,
       commentCount: p.comments_count ?? 0,
       tags: (p.hashtags ?? []).map((t: RawTag) => (typeof t === "string" ? t : (t.content ?? ""))),
+      post_type: p.post_type || null,
     };
   });
 
