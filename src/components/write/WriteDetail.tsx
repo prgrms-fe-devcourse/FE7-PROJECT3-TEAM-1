@@ -415,7 +415,7 @@ export default function WriteDetail() {
           pick ? "translate-y-6 opacity-100 dark:text-slate-300" : "translate-y-0 opacity-0"
         } dark:bg-[#141d2b]`}
       >
-        {pick ? (
+        {pick && pick !== "hold" ? (
           <div className="relative w-full flex justify-center mb-3 px-2">
             {/* 숫자 말풍선 */}
             <div
