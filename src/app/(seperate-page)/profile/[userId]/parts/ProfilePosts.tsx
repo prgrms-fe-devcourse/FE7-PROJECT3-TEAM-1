@@ -49,6 +49,7 @@ export default function ProfilePosts({
           dataLength={Math.min(currentLimit, currentPosts.length)}
           next={() => setCurrentLimit((prev) => prev + POST_PAGE_SIZE)}
           hasMore={currentLimit < currentPosts.length}
+          scrollableTarget="main-scroll-container"
           scrollThreshold={0.95}
           loader={
             <p className="text-center text-slate-400 py-4 dark:text-slate-500">불러오는 중…</p>

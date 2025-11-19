@@ -263,6 +263,7 @@ export default function Page() {
               dataLength={Math.min(postLimit, filteredPosts.length)}
               next={() => setPostLimit((prev) => prev + POST_PAGE_SIZE)}
               hasMore={postLimit < filteredPosts.length}
+              scrollableTarget="main-scroll-container"
               loader={<p className="text-center text-slate-400 py-4">불러오는 중…</p>}
             >
               <div className="flex flex-col gap-4">
@@ -278,6 +279,7 @@ export default function Page() {
               dataLength={Math.min(userLimit, filteredUsers.length)}
               next={() => setUserLimit((prev) => prev + USER_PAGE_SIZE)}
               hasMore={userLimit < filteredUsers.length}
+              scrollableTarget="main-scroll-container"
               loader={<p className="text-center text-slate-400 py-4">불러오는 중…</p>}
             >
               <div className="flex flex-col gap-3">
@@ -293,6 +295,7 @@ export default function Page() {
               dataLength={Math.min(tagLimit, filteredTags.length)}
               next={() => setTagLimit((prev) => prev + TAG_PAGE_SIZE)}
               hasMore={tagLimit < filteredTags.length}
+              scrollableTarget="main-scroll-container"
               loader={<p className="text-center text-slate-400 py-4">불러오는 중…</p>}
             >
               <div className="grid grid-cols-1 gap-3">
