@@ -143,7 +143,7 @@ export default function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <div className="rounded-2xl bg-card border border-border shadow-[0_4px_16px_rgba(15,23,42,0.06)] px-6 py-5 flex flex-col gap-4">
+      <div className="rounded-2xl bg-white border  border-slate-200 shadow-[0_4px_16px_rgba(15,23,42,0.06)] px-6 py-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
         <SearchBar value={input} onChange={setInput} onSubmit={onSubmit} />
         <SearchTabs active={active} counts={counts} onChange={onChangeTab} />
       </div>
@@ -194,7 +194,7 @@ export default function Page() {
                     {filteredUsers.length > 3 && (
                       <button
                         type="button"
-                        onClick={() => setShowAllUsers((prev) => !prev)}
+                        onClick={() => setShowAllPosts((prev) => !prev)}
                         className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-400"
                       >
                         {showAllUsers ? "접기" : "더보기"}
