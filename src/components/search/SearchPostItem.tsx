@@ -95,8 +95,10 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="text-xl font-bold text-foreground">{post.title}</h3>
-              <p className="line-clamp-1 font-medium text-muted-foreground">{post.content}</p>
+             <h3 className="text-xl font-bold dark:text-gray-300">{post.title}</h3>
+              <p className="line-clamp-1 font-medium text-slate-700 dark:text-gray-400">
+                {post.content}
+              </p>
             </div>
 
             {hashtags && (
