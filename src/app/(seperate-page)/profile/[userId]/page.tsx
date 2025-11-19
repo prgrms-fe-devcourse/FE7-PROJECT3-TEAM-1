@@ -188,7 +188,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
         <ProfileChart chartData={chartData} hasRealData={hasRealData} />
       </section>
 
-      <ProfilePosts written={writtenPosts} viewed={viewedPosts} />
+      <ProfilePosts written={writtenPosts} viewed={viewedPosts} isMe={isMe}/>
     </div>
   );
 }
