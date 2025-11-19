@@ -7,7 +7,7 @@ import { ToasterClient } from "@/components/common/ToasterClient";
 
 export const metadata = {
   title: {
-    default: "UPDOWN - 감정주식시장",
+    default: "감정주식시장 - UPDOWN",
     template: "%s - UPDOWN",
   },
   description: "감정을 기록하고, 공유하고, 비교해보세요.",
