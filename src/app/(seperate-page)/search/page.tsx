@@ -241,7 +241,7 @@ export default function Page() {
                       <button
                         type="button"
                         onClick={() => setShowAllPosts((prev) => !prev)}
-                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-300"
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-400"
                       >
                         {showAllPosts ? "접기" : "더보기"}
                       </button>
