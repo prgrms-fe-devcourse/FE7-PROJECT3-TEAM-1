@@ -106,7 +106,7 @@ export default function AlertsPageClient({
               onClick={() => handleClick(n)}
               className={`
                 flex justify-between items-center w-full px-6 py-4 text-left transition cursor-pointer hover:opacity-80 active:scale-[.99]
-                ${n.is_read ? "bg-white dark:bg-[#141d2b]" : "bg-[#EFF6FF] dark:bg-[#141d2b]"}
+                ${n.is_read ? "bg-white dark:bg-[#141d2b]" : "bg-[#e1ecfb] dark:bg-[#353f4e]"}
               `}
             >
               {/* 왼쪽 */}
