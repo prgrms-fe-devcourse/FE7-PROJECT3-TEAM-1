@@ -3,10 +3,16 @@ import TrendTags from "@/components/common/TrendTags";
 import TrendTagsSkeleton from "@/components/skeleton/TrendTagsSkeleton";
 import { Suspense } from "react";
 import { twMerge } from "tailwind-merge";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "UPDOWN - 커뮤니티",
-  description: "사람들의 감정 주식장을 비교해보세요.",
+export const metadata: Metadata = {
+  title: "커뮤니티",
+  description:
+    "감정을 공유하고 소통하는 커뮤니티 공간입니다. 다양한 게시글을 확인하고 참여해보세요.",
+  openGraph: {
+    title: "커뮤니티 - UPDOWN",
+    description: "감정을 공유하고 소통하는 커뮤니티 공간입니다.",
+  },
 };
 
 export default function CommunityLayout({ children }: { children: React.ReactNode }) {
