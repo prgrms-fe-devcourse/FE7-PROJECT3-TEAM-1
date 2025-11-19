@@ -509,36 +509,40 @@ export default function WriteDetail() {
           value={title}
           onChange={handleChangeTitle}
         />
-        <span className="absolute bottom-2 right-4 font-normal text-[#AAAAAA] text-sm dark:text-slate-400">
-          {title.length} / 40
-        </span>
-        {hasBadTitle ? (
-          <p className="mt-0.5 ml-2 absolute text-[#c85c5c] text-sm dark:text-slate-400">
-            적절하지 못한 제목입니다
-          </p>
-        ) : (
-          ""
-        )}
+        <div className="flex items-center justify-between mt-0.5">
+          {hasBadTitle ? (
+            <p className="ml-2 font-normal text-[#c85c5c] text-sm dark:text-[#c85c5c]">
+              적절하지 못한 제목입니다
+            </p>
+          ) : (
+            <div></div>
+          )}
+          <span className="mr-2 font-normal text-[#AAAAAA] text-sm dark:text-slate-300">
+            {title.length} / 40
+          </span>
+        </div>
       </div>
 
       {/* 메모 */}
-      <div className="relative w-full flex-1 min-h-0 outline-none focus:outline-none select-none ">
+      <div className="relative w-full flex-1 min-h-0 outline-none focus:outline-none select-none mb-4">
         <textarea
           className="bg-[#F9FAFB] border rounded-xl border-[#E5E7EB] w-full h-full min-h-60 mt-4 resize-none outline-none focus:scale-102 transform transition-transform duration-200 px-4 py-3 dark:bg-[#141d2b] dark:border-slate-700 dark:text-slate-300"
           placeholder="오늘의 메모를 남겨보세요..."
           value={content}
           onChange={handleChangeContent}
         />
-        <span className="absolute bottom-0 right-4 font-normal text-[#AAAAAA] text-sm dark:text-slate-400">
-          {content.length} / 500
-        </span>
-        {hasBadContent ? (
-          <p className="absolute ml-2 text-[#c85c5c] text-sm dark:text-slate-400">
-            적절하지 못한 내용입니다
-          </p>
-        ) : (
-          ""
-        )}
+        <div className="flex items-center justify-between mt-1">
+          {hasBadContent ? (
+            <p className="ml-2 font-normal text-[#c85c5c] text-sm dark:text-[#c85c5c]">
+              적절하지 못한 내용입니다
+            </p>
+          ) : (
+            <div></div>
+          )}
+          <span className="mr-2 font-normal text-[#AAAAAA] text-sm dark:text-slate-300">
+            {content.length} / 500
+          </span>
+        </div>
       </div>
 
       {/* 업로드된 이미지 */}
