@@ -302,7 +302,8 @@ export default function WriteDetail() {
 
         if (feelError) throw feelError;
 
-        const tagString = selectedTags[pick].join(",");
+        // const tagString = selectedTags[pick].join(",");
+        const tagString = selectedTags[pick]?.join(",") || "";
         const { error: tagError } = await supabase
           .from("hashtags")
           .update({ post_id: postId, content: tagString })
@@ -634,7 +635,7 @@ export default function WriteDetail() {
           hover:scale-101 transform transition-transform duration-150 
           active:scale-[.99] px-2 dark:bg-[#141d2b] dark:border-slate-700 
           dark:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] 
-          dark:from-[#6B8FA3] dark:to-[#7A8FB8] disabled:cursor-not-allowed disabled:hover:scale-100
+          dark:from-[#6B8FA3] dark:to-[#7A8FB8] disabled:cursor-not-allowed disabled:hover:scale-100 disabled:opacity-50
         "
         onClick={handlePublish}
         disabled={!title || !content || !pick}

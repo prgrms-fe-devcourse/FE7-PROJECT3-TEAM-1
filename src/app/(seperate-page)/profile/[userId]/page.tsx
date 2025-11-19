@@ -181,7 +181,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
     return acc;
   })();
 
-  console.log("writtenPosts (with post_type):", writtenPosts);
+  // console.log("writtenPosts (with post_type):", writtenPosts);
   return (
     <div className="w-full space-y-6">
       <section className="rounded-2xl bg-white p-6 shadow-sm border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">

@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { MessageCircle, Eye, Lock, Heart, ArrowUp, ArrowDown, ArrowRight } from "lucide-react";
+import { MessageCircle, Eye, Lock, Heart } from "lucide-react";
 import FeelBadge from "@/components/common/FeelBadge";
 
 type Tag = { id?: string | number; label: string } | string;
