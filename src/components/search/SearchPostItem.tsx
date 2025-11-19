@@ -85,8 +85,7 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
                 onClick={handleProfileClick}
                 className="flex flex-col gap-0.5 text-left cursor-pointer"
               >
-                <strong className="font-semibold text-slate-800 dark:text-gray-300">
-                  {post.users.display_name}
+                <strong className="font-semibold text-slate-800 dark:text-gray-300">{post.users.display_name}</strong>
                 <span className="text-slate-400 text-xs">
                   {formatRelativeTime(post.created_at)}
                 </span>
