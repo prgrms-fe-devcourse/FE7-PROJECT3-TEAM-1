@@ -17,7 +17,6 @@ import {
   PenTool,
   X,
   Menu,
-  BellDot,
 } from "lucide-react";
 import type { Database } from "@/utils/supabase/supabase";
 import { twMerge } from "tailwind-merge";
@@ -37,7 +36,12 @@ const Icon = {
   search: ({ className }: { className?: string }) => <Search size={18} className={className} />,
   profile: ({ className }: { className?: string }) => <UserIcon size={18} className={className} />,
   bell: ({ className }: { className?: string }) => <Bell size={18} className={className} />,
-  bellDot: ({ className }: { className?: string }) => <BellDot size={18} className={className} />,
+  bellDot: ({ className }: { className?: string }) => (
+    <div className="relative inline-block">
+      <Bell size={18} className={className} />
+      <div className="absolute top-0 right-0 w-2 h-2 bg-red-400 rounded-full" />
+    </div>
+  ),
   write: ({ className }: { className?: string }) => <PenTool size={18} className={className} />,
 };
 

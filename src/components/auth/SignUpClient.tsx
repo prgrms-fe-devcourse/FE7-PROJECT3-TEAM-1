@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import ProfileImage from "../common/ProfileImage";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
+import { useUserStore } from "@/store/useStore";
+import { useRouter } from "next/navigation";
 
 export default function SignUpClient({
   userId,
@@ -26,6 +28,8 @@ export default function SignUpClient({
   const [bio, setBio] = useState("");
   const [displayNameCount, setDisplayNameCount] = useState(displayName.length);
   const [bioCount, setBioCount] = useState(bio.length);
+  const { setProfile, profile } = useUserStore();
+  const router = useRouter();
 
   // 폼 제출 안하고 다음 단계로 이동
   const handleForm = (e: React.FormEvent) => {
@@ -44,15 +48,42 @@ export default function SignUpClient({
   };
 
   // 저장 핸들러
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!displayName || displayName.trim() === "") {
       toast.error("닉네임을 입력해주세요.");
       setIsDone((prev) => !prev);
       return;
     }
 
-    save(userId, displayName, bio);
-    toast.success("프로필 설정이 완료되었습니다!");
+    try {
+      // zustand에 즉시 업데이트 (UI 즉시 반영)
+      if (profile) {
+        setProfile({
+          ...profile,
+          id: userId,
+          display_name: displayName.trim(),
+          bio: bio.trim() || null,
+        });
+      } else {
+        setProfile({
+          id: userId,
+          display_name: displayName.trim(),
+          bio: bio.trim() || null,
+          email: "",
+          image_url: userImage || null,
+          created_at: new Date().toISOString(),
+        });
+      }
+
+      // 서버에 프로필 저장
+      await save(userId, displayName, bio);
+
+      toast.success("프로필 설정이 완료되었습니다!");
+      router.push(`/profile/${userId}`);
+    } catch (error) {
+      console.error("프로필 저장 실패:", error);
+      toast.error("프로필 저장에 실패했습니다.");
+    }
   };
 
   // 폭죽 효과

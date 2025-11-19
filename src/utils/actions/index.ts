@@ -61,16 +61,20 @@ export async function save(userId: string, displayName: string, bio: string) {
 
   const supabase = await createClient();
 
-  if (!displayName || !bio) {
+  if (!displayName || displayName.trim() === "" || !bio || bio.trim() === "") {
     throw new Error("닉네임과 자기소개를 모두 입력해주세요.");
   }
 
-  await supabase
+  const { error } = await supabase
     .from("users")
     .update({ display_name: displayName.trim(), bio: bio.trim() })
     .eq("id", userId);
 
-  redirect(`/profile/${userId}`);
+  if (error) {
+    throw new Error("프로필 저장에 실패했습니다.");
+  }
+
+  return { success: true };
 }
 
 // 서버에서 사용자 프로필 가져오기
