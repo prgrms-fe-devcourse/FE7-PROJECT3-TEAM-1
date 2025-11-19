@@ -36,7 +36,14 @@ export default function WriteDetail() {
   const [content, setContent] = useState("");
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [pick, setPick] = useState<"up" | "down" | "hold" | "">("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // 선택한 해시태그 저장
+  const [selectedTags, setSelectedTags] = useState<Record<"up" | "down" | "hold", string[]>>({
+    up: [],
+    down: [],
+    hold: [],
+  });
+
   const [sliderValue, setSliderValue] = useState([4]); // 현재 단계 (0~9)
   const [hadInitialImage, setHadInitialImage] = useState(false); // 초기 로드 시 이미지가 있었는지 추적
   const totalSteps = 10;
@@ -79,11 +86,18 @@ export default function WriteDetail() {
   // pick에 따라 hashtag 배열 가져오기
   const hashtags = pick === "up" ? up : pick === "down" ? down : pick === "hold" ? hold : [];
 
-  // 해시태그 클릭 시 토글 동작
+  // 해시태그 클릭 시 토글 동작 (현재 pick의 태그만 업데이트)
   const toggleTag = (tag: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
-    );
+    if (!pick || pick === undefined) return;
+    setSelectedTags((prev) => {
+      const currentTags = prev[pick] || [];
+      return {
+        ...prev,
+        [pick]: currentTags.includes(tag)
+          ? currentTags.filter((t) => t !== tag)
+          : [...currentTags, tag],
+      };
+    });
   };
 
   const imageUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -234,7 +248,7 @@ export default function WriteDetail() {
 
         if (feelError) throw feelError;
 
-        const tagString = selectedTags.join(",");
+        const tagString = selectedTags[pick].join(",");
         const { error: tagError } = await supabase
           .from("hashtags")
           .insert([{ post_id: postId, content: tagString }]);
@@ -288,7 +302,7 @@ export default function WriteDetail() {
 
         if (feelError) throw feelError;
 
-        const tagString = selectedTags.join(",");
+        const tagString = selectedTags[pick].join(",");
         const { error: tagError } = await supabase
           .from("hashtags")
           .update({ post_id: postId, content: tagString })
@@ -359,16 +373,20 @@ export default function WriteDetail() {
         setSliderValue([feels.amount - 1]);
       }
 
-      if (Array.isArray(hashtags.content)) {
-        setSelectedTags(hashtags.content);
-      } else if (typeof hashtags.content === "string") {
-        setSelectedTags(
-          hashtags.content
-            .split(",")
-            .map((t) => t.trim())
-            .filter((t) => t !== ""),
-        );
-      }
+      // 수정 모드
+      const tagArray = Array.isArray(hashtags.content)
+        ? hashtags.content
+        : typeof hashtags.content === "string"
+          ? hashtags.content
+              .split(",")
+              .map((t) => t.trim())
+              .filter((t) => t !== "")
+          : [];
+
+      setSelectedTags((prev) => ({
+        ...prev,
+        [feels.type]: tagArray,
+      }));
     })();
   }, [pageId, router, supabase]);
 
@@ -392,7 +410,6 @@ export default function WriteDetail() {
               key={e.key}
               onClick={() => {
                 setPick(e.key);
-                setSelectedTags([]);
               }}
               className={`flex justify-center items-center flex-col flex-1 w-full sm:w-auto min-h-20 rounded-xl cursor-pointer transition-transform duration-200 transform hover:scale-102 py-4
                   ${
@@ -480,24 +497,30 @@ export default function WriteDetail() {
         )}
         {/* 해시태그 영역 */}
         <div className="w-full flex flex-row flex-wrap lg:justify-between gap-2 text-[#4A5565] mb-6 px-2 dark:text-slate-400">
-          {hashtags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => toggleTag(tag)}
-              className={`cursor-pointer px-3 py-1 text-xs border rounded-full transition-colors duration-150 select-none
-                    ${
-                      selectedTags.includes(tag)
-                        ? pick === "up"
-                          ? "bg-[#FF6467] text-white border-[#ff6467] dark:text-white"
-                          : pick === "down"
-                            ? "bg-[#51A2FF] text-white border-[#51A2FF] dark:text-white"
-                            : "bg-[#99A1AF] text-white border-[#99A1AF] dark:text-white"
-                        : "border-[#E5E7EB] text-[#4A5565] hover:text-black hover:bg-black/5 dark:border-slate-700 dark:bg-[#141d2b] dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700"
-                    }`}
-            >
-              #{tag}
-            </button>
-          ))}
+          {hashtags.map((tag) => {
+            // 현재 pick의 태그만 확인
+            const currentTags =
+              pick === "up" || pick === "down" || pick === "hold" ? selectedTags[pick] || [] : [];
+            const isSelected = currentTags.includes(tag);
+            return (
+              <button
+                key={tag}
+                onClick={() => toggleTag(tag)}
+                className={`cursor-pointer px-3 py-1 text-xs border rounded-full transition-colors duration-150 select-none
+                      ${
+                        isSelected
+                          ? pick === "up"
+                            ? "bg-[#FF6467] text-white border-[#ff6467] dark:text-white"
+                            : pick === "down"
+                              ? "bg-[#51A2FF] text-white border-[#51A2FF] dark:text-white"
+                              : "bg-[#99A1AF] text-white border-[#99A1AF] dark:text-white"
+                          : "border-[#E5E7EB] text-[#4A5565] hover:text-black hover:bg-black/5 dark:border-slate-700 dark:bg-[#141d2b] dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700"
+                      }`}
+              >
+                #{tag}
+              </button>
+            );
+          })}
         </div>
       </div>
 
