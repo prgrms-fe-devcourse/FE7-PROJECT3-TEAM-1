@@ -194,7 +194,7 @@ export default function Page() {
                     {filteredUsers.length > 3 && (
                       <button
                         type="button"
-                        onClick={() => setShowAllPosts((prev) => !prev)}
+                        onClick={() => setShowAllUsers((prev) => !prev)}
                         className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-400"
                       >
                         {showAllUsers ? "접기" : "더보기"}
