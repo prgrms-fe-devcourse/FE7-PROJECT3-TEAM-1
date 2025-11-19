@@ -22,7 +22,7 @@ const DashboardCards = memo(function DashboardCards({
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
       {/* 상승 감정 */}
-      <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 dark:bg-[#141c2c]">
+      <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-slate-300 dark:bg-[#141d2b] dark:border-[#364153]">
         <div className="flex items-center justify-between gap-2 mb-4 select-none">
           <span className="text-lg font-bold text-gray-800 dark:text-gray-300">
             상승 감정 TOP 3
@@ -47,7 +47,7 @@ const DashboardCards = memo(function DashboardCards({
       </div>
 
       {/* 하락 감정 */}
-      <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 dark:bg-[#141c2c]">
+      <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-slate-300 dark:bg-[#141d2b] dark:border-[#364153]">
         <div className="flex items-center justify-between gap-2 mb-4 select-none">
           <span className="text-lg font-bold text-gray-800 dark:text-gray-300">
             하락 감정 TOP 3
@@ -72,7 +72,7 @@ const DashboardCards = memo(function DashboardCards({
       </div>
 
       {/* 커뮤니티 활동 */}
-      <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 dark:bg-[#141c2c]">
+      <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-slate-300 dark:bg-[#141d2b] dark:border-[#364153]">
         <div className="flex items-center justify-between gap-2 mb-4 select-none">
           <span className="text-lg font-bold text-gray-800 dark:text-gray-300">커뮤니티 활동</span>
           <Antenna className="w-5 h-5 text-blue-600" />

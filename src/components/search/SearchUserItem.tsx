@@ -66,7 +66,7 @@ export default function SearchUserItem({ user }: { user: SearchUserWithFollow })
           type="button"
           onClick={handleFollowToggle} // 이벤트 객체 넘어옴
           disabled={followPending}
-          className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] text-white text-sm font-semibold hover:opacity-90 active:scale-[.99] transition cursor-pointer disabled:opacity-70 disabled:cursor-default"
+          className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] dark:from-[#6B8FA3] dark:to-[#7A8FB8] text-white text-sm font-semibold hover:opacity-90 active:scale-[.99] transition cursor-pointer disabled:opacity-70 disabled:cursor-default"
         >
           {followPending ? "처리 중..." : following ? "언팔로우" : "팔로우"}
         </button>

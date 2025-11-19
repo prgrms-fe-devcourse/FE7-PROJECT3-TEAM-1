@@ -53,11 +53,11 @@ export default function ProfilePosts({
           loader={
             <p className="text-center text-slate-400 py-4 dark:text-slate-500">불러오는 중…</p>
           }
-          endMessage={
-            <p className="text-center text-slate-400 py-4 dark:text-slate-500">
-              마지막 게시글입니다.
-            </p>
-          }
+          // endMessage={
+          //   <p className="text-center text-slate-400 py-4 dark:text-slate-500">
+          //     마지막 게시글입니다.
+          //   </p>
+          // }
         >
           <PostList posts={currentPosts.slice(0, currentLimit)} hideTitle />
         </InfiniteScroll>
