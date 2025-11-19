@@ -245,6 +245,10 @@ export default function Header({
                           alt="active"
                           width={8}
                           height={8}
+                          style={{
+                            transform: "rotate(180deg)",
+                            ...(isDark && { filter: "invert(1)" }),
+                          }}
                         />
                       ) : null}
                     </Link>

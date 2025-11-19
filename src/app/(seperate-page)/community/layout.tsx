@@ -4,6 +4,11 @@ import TrendTagsSkeleton from "@/components/skeleton/TrendTagsSkeleton";
 import { Suspense } from "react";
 import { twMerge } from "tailwind-merge";
 
+export const metadata = {
+  title: "UPDOWN - 커뮤니티",
+  description: "사람들의 감정 주식장을 비교해보세요.",
+};
+
 export default function CommunityLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={twMerge("flex h-full", "flex-col gap-10", "xl:flex-row xl:gap-6")}>
