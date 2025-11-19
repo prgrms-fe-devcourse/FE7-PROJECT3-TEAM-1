@@ -77,7 +77,7 @@ export default function DashboardContentWrapper({ initialData }: DashboardConten
       <div className="w-full space-y-6">
         {/* 상단 섹션 */}
         <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-slate-300 dark:bg-[#141d2b] dark:border-[#364153]">
-          <span className="text-2xl md:text-2xl font-bold text-gray-800 mb-16 p-4 block dark:text-gray-300">
+          <span className="text-2xl md:text-2xl font-bold text-gray-800 mb-8 mt-4 block dark:text-gray-300">
             {!isLoggedIn
               ? "안녕하세요, 로그인을 해주세요."
               : userName
