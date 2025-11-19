@@ -18,10 +18,8 @@ export async function followToggle(targetUserId: string) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 로그인 안 했거나, 자기 자신 팔로우 방지
   if (!user || user.id === targetUserId) return;
 
-  // 이미 팔로우 했는지 확인
   const { data: rel } = await supabase
     .from("follows")
     .select("id")
@@ -30,7 +28,6 @@ export async function followToggle(targetUserId: string) {
     .maybeSingle();
 
   if (rel) {
-    // 이미 관계가 있으면 => 언팔로우
     const { error: deleteErr } = await supabase
       .from("follows")
       .delete()
@@ -40,11 +37,9 @@ export async function followToggle(targetUserId: string) {
       console.error("[followToggle] unfollow error:", deleteErr);
     }
 
-    
     return;
   }
 
- 
   const { error: insertFollowErr } = await supabase.from("follows").insert({
     follower_id: user.id,
     following_id: targetUserId,
@@ -55,11 +50,10 @@ export async function followToggle(targetUserId: string) {
     return;
   }
 
-  
   const { error: notiErr } = await supabase.from("notifications").insert({
     type: "follow",
-    receiver_id: targetUserId, 
-    sender_id: user.id,       
+    receiver_id: targetUserId,
+    sender_id: user.id,
     post_id: null,
     comment_id: null,
     is_read: false,
@@ -68,4 +62,29 @@ export async function followToggle(targetUserId: string) {
   if (notiErr) {
     console.error("[followToggle] notification insert error:", notiErr);
   }
+}
+
+
+export async function clearRecentViews() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, error: "UNAUTHORIZED" };
+  }
+
+  const { error } = await supabase
+    .from("recent_views")
+    .delete()
+    .eq("user_id", user.id);
+
+  if (error) {
+    console.error("[clearRecentViews] delete error:", error);
+    return { ok: false, error: "DB_ERROR" };
+  }
+
+  return { ok: true };
 }
