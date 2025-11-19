@@ -112,12 +112,14 @@ export default function DashboardStats({ data }: DashboardStatsProps) {
           const holdRatio = hold / total;
           const maxValue = Math.max(up, down, hold);
 
-          console.log("감정 비율 분석:", {
-            upRatio: upRatio.toFixed(2),
-            downRatio: downRatio.toFixed(2),
-            holdRatio: holdRatio.toFixed(2),
-            maxValue,
-          });
+          if (process.env.NODE_ENV === "development") {
+            console.log("감정 비율 분석:", {
+              upRatio: upRatio.toFixed(2),
+              downRatio: downRatio.toFixed(2),
+              holdRatio: holdRatio.toFixed(2),
+              maxValue,
+            });
+          }
         }
       }
     }
