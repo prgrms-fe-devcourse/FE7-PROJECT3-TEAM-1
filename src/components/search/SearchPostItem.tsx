@@ -72,23 +72,21 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
   const feel: CoreFeelType = (post.feels?.[0]?.type?.toLowerCase?.() ?? "hold") as CoreFeelType;
 
   return (
-    <article className="p-5 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-white border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">
+    <article className="p-5 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-card border border-border">
       <Link href={`/community/${post.id}`}>
         <div className="flex gap-4 pb-5">
           <ProfileImage displayName={post.users.display_name} imageUrl={post.users.image_url} />
 
           <div className="flex-1 flex flex-col gap-4">
             <div className="flex justify-between items-center">
-              {/* ⬇️ 이 영역을 버튼으로 만들어 프로필 이동 */}
+              {/* 이 영역을 버튼으로 만들어 프로필 이동 */}
               <button
                 type="button"
                 onClick={handleProfileClick}
                 className="flex flex-col gap-0.5 text-left cursor-pointer"
               >
-                <strong className="font-semibold text-slate-800 dark:text-gray-300">
-                  {post.users.display_name}
-                </strong>
-                <span className="text-slate-400 text-xs">
+                <strong className="font-semibold text-foreground">{post.users.display_name}</strong>
+                <span className="text-muted-foreground text-xs">
                   {formatRelativeTime(post.created_at)}
                 </span>
               </button>
@@ -97,10 +95,8 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="text-xl font-bold dark:text-gray-300">{post.title}</h3>
-              <p className="line-clamp-1 font-medium text-slate-700 dark:text-gray-400">
-                {post.content}
-              </p>
+              <h3 className="text-xl font-bold text-foreground">{post.title}</h3>
+              <p className="line-clamp-1 font-medium text-muted-foreground">{post.content}</p>
             </div>
 
             {hashtags && (
@@ -108,7 +104,7 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
                 {hashtags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2 py-1 rounded-2xl dark:bg-gray-700 dark:text-gray-300 bg-slate-200 text-xs text-slate-600"
+                    className="px-2 py-1 rounded-2xl bg-muted text-xs text-muted-foreground"
                   >
                     #{tag}
                   </span>
@@ -118,7 +114,7 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
           </div>
         </div>
 
-        <div className="flex gap-5 border-t border-slate-200 pt-5 dark:border-[#364153]">
+        <div className="flex gap-5 border-t border-border pt-5">
           <Button onClick={likeHandler}>
             <Heart
               size={18}

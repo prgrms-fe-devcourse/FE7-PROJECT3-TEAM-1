@@ -143,7 +143,7 @@ export default function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_4px_16px_rgba(15,23,42,0.06)] px-6 py-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+      <div className="rounded-2xl bg-card border border-border shadow-[0_4px_16px_rgba(15,23,42,0.06)] px-6 py-5 flex flex-col gap-4">
         <SearchBar value={input} onChange={setInput} onSubmit={onSubmit} />
         <SearchTabs active={active} counts={counts} onChange={onChangeTab} />
       </div>
@@ -154,17 +154,17 @@ export default function Page() {
           {/* 전체 탭 */}
           {active === "all" && (
             <>
-              <section className="rounded-2xl bg-white border p-5 dark:bg-[#141827] dark:border-[#181d2a]">
+              <section className="rounded-2xl bg-card border border-border p-5">
                 <h3 className="font-semibold text-slate-700 dark:text-gray-300 mb-4">사용자</h3>
                 <SearchUserListSkeleton count={3} />
               </section>
 
-              <section className="rounded-2xl bg-white border p-5 dark:bg-[#141827] dark:border-[#181d2a]">
+              <section className="rounded-2xl bg-card border border-border p-5">
                 <h3 className="font-semibold text-slate-700 dark:text-gray-300 mb-4">태그</h3>
                 <SearchTagListSkeleton count={6} />
               </section>
 
-              <section className="rounded-2xl bg-white border p-5 dark:bg-[#141827] dark:border-[#181d2a]">
+              <section className="rounded-2xl bg-card border border-border p-5">
                 <h3 className="font-semibold text-slate-700 dark:text-gray-300 mb-4">게시글</h3>
                 <SearchPostListSkeleton count={3} />
               </section>
@@ -177,7 +177,6 @@ export default function Page() {
           {active === "tags" && <SearchTagListSkeleton count={TAG_PAGE_SIZE} />}
         </div>
       )}
-
       {/* 에러 */}
       {err && <p className="text-red-500">{err}</p>}
 
@@ -189,14 +188,14 @@ export default function Page() {
             <>
               {/* 사용자 섹션 */}
               {filteredUsers.length > 0 && (
-                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                <section className="rounded-2xl bg-card border border-border p-5 flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-slate-700 font-semibold">사용자</h3>
+                    <h3 className="text-slate-700 font-semibold dark:text-slate-300">사용자</h3>
                     {filteredUsers.length > 3 && (
                       <button
                         type="button"
                         onClick={() => setShowAllUsers((prev) => !prev)}
-                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-400"
                       >
                         {showAllUsers ? "접기" : "더보기"}
                       </button>
@@ -212,14 +211,14 @@ export default function Page() {
 
               {/* 태그 섹션 */}
               {filteredTags.length > 0 && (
-                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                <section className="rounded-2xl bg-card border border-border p-5 flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-slate-700 font-semibold">태그</h3>
+                    <h3 className="text-slate-700 font-semibold dark:text-slate-300">태그</h3>
                     {filteredTags.length > 3 && (
                       <button
                         type="button"
                         onClick={() => setShowAllTags((prev) => !prev)}
-                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-400"
                       >
                         {showAllTags ? "접기" : "더보기"}
                       </button>
@@ -235,14 +234,14 @@ export default function Page() {
 
               {/* 게시글 섹션 */}
               {filteredPosts.length > 0 && (
-                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
+                <section className="rounded-2xl bg-card border border-border p-5 flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-slate-700 font-semibold">게시글</h3>
+                    <h3 className="text-slate-700 font-semibold dark:text-slate-300">게시글</h3>
                     {filteredPosts.length > 3 && (
                       <button
                         type="button"
                         onClick={() => setShowAllPosts((prev) => !prev)}
-                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
+                        className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer dark:text-slate-300"
                       >
                         {showAllPosts ? "접기" : "더보기"}
                       </button>
