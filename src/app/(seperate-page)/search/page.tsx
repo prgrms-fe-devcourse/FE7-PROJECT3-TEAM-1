@@ -154,12 +154,12 @@ export default function Page() {
           {/* 전체 탭 */}
           {active === "all" && (
             <>
-              <section className="rounded-2xl bg-card border border-border p-5">
+              <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
                 <h3 className="font-semibold text-slate-700 dark:text-gray-300 mb-4">사용자</h3>
                 <SearchUserListSkeleton count={3} />
               </section>
 
-              <section className="rounded-2xl bg-card border border-border p-5">
+              <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
                 <h3 className="font-semibold text-slate-700 dark:text-gray-300 mb-4">태그</h3>
                 <SearchTagListSkeleton count={6} />
               </section>
@@ -188,7 +188,7 @@ export default function Page() {
             <>
               {/* 사용자 섹션 */}
               {filteredUsers.length > 0 && (
-                <section className="rounded-2xl bg-card border border-border p-5 flex flex-col gap-4">
+                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
                   <div className="flex items-center justify-between">
                     <h3 className="text-slate-700 font-semibold dark:text-slate-300">사용자</h3>
                     {filteredUsers.length > 3 && (
@@ -211,7 +211,7 @@ export default function Page() {
 
               {/* 태그 섹션 */}
               {filteredTags.length > 0 && (
-                <section className="rounded-2xl bg-card border border-border p-5 flex flex-col gap-4">
+                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
                   <div className="flex items-center justify-between">
                     <h3 className="text-slate-700 font-semibold dark:text-slate-300">태그</h3>
                     {filteredTags.length > 3 && (
@@ -234,7 +234,7 @@ export default function Page() {
 
               {/* 게시글 섹션 */}
               {filteredPosts.length > 0 && (
-                <section className="rounded-2xl bg-card border border-border p-5 flex flex-col gap-4">
+                <section className="rounded-2xl bg-white border border-slate-200 p-5 flex flex-col gap-4 dark:bg-[#141827] dark:border-[#181d2a]">
                   <div className="flex items-center justify-between">
                     <h3 className="text-slate-700 font-semibold dark:text-slate-300">게시글</h3>
                     {filteredPosts.length > 3 && (
