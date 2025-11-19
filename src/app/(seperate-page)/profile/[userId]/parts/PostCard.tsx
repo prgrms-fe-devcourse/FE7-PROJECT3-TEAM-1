@@ -92,11 +92,11 @@ export default function PostCard({
 
           <footer className="flex items-center gap-4 text-sm text-slate-500 dark:text-gray-400">
             <div className="inline-flex items-center gap-1">
-              <Heart className="h-4 w-4" fill="currentColor" />
+              <Heart className="h-4 w-4 stroke-slate-300 fill-slate-300 dark:stroke-[#b2b7c2] dark:fill-[#b2b7c2]" />
               <span className="font-semibold dark:text-gray-400">{likeCount}</span>
             </div>
             <div className="inline-flex items-center gap-1">
-              <MessageCircle className="h-4 w-4" />
+              <MessageCircle className="h-4 w-4  stroke-slate-300 fill-slate-300 dark:stroke-[#b2b7c2] dark:fill-[#b2b7c2]" />
               <span className="font-semibold dark:text-gray-400">{commentCount}</span>
             </div>
           </footer>
