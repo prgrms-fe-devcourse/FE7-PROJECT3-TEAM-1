@@ -87,7 +87,7 @@ export default function SearchPostItem({ post }: { post: CommunityPost }) {
               >
                 <strong className="font-semibold text-slate-800 dark:text-gray-300">
                   {post.users.display_name}
-                <span className="text-muted-foreground text-xs">
+                <span className="text-slate-400 text-xs">
                   {formatRelativeTime(post.created_at)}
                 </span>
               </button>
