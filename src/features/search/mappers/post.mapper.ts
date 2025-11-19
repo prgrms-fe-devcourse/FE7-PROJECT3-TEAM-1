@@ -21,10 +21,10 @@ export const mapRowToCommunityPost = (
 
   return {
     id: r.id,
+    user_id: r.user_id,
     created_at: r.created_at,
     title: r.title ?? "",
     content: r.content ?? "",
-    // DB 컬럼 대신 계산된 값을 사용 (DB likes_count 안 맞아도 UI는 항상 정확)
     likes_count: likeCount,
     comments_count: r.comments_count ?? 0,
     users: {

@@ -1,5 +1,6 @@
 export type DBPostRow = {
   id: string;
+  user_id: string;
   created_at: string;
   title: string | null;
   content: string | null;
