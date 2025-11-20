@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { MessageCircle, Eye, Lock, Heart } from "lucide-react";
+import FeelBadge from "@/components/common/FeelBadge";
 
 type Tag = { id?: string | number; label: string } | string;
 
@@ -14,6 +15,7 @@ export default function PostCard({
   likeCount,
   commentCount,
   tags = [],
+  post_type,
 }: {
   id: string | number;
   createdAt: string;
@@ -22,6 +24,7 @@ export default function PostCard({
   likeCount: number;
   commentCount: number;
   tags?: Tag[];
+  post_type?: string | null;
 }) {
   const vis =
     visibility === "public" ? (
@@ -50,7 +53,11 @@ export default function PostCard({
       <article className="rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md cursor-pointer border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">
         <header className="mb-3 flex items-center justify-between text-xs text-slate-500 dark:text-gray-400">
           <div className="flex items-center gap-2">
-            <span className="inline-block h-4 w-4 rounded bg-rose-100" aria-hidden />
+            {post_type && (
+              <>
+                <FeelBadge type={post_type as "up" | "down" | "hold"} size="sm" />
+              </>
+            )}
             <span>{dateLabel}</span>
           </div>
           {vis}
@@ -85,11 +92,11 @@ export default function PostCard({
 
           <footer className="flex items-center gap-4 text-sm text-slate-500 dark:text-gray-400">
             <div className="inline-flex items-center gap-1">
-              <Heart className="h-4 w-4" fill="currentColor" />
+              <Heart className="h-4 w-4 stroke-slate-300 fill-slate-300 dark:stroke-[#b2b7c2] dark:fill-[#b2b7c2]" />
               <span className="font-semibold dark:text-gray-400">{likeCount}</span>
             </div>
             <div className="inline-flex items-center gap-1">
-              <MessageCircle className="h-4 w-4" />
+              <MessageCircle className="h-4 w-4  stroke-slate-300 fill-slate-300 dark:stroke-[#b2b7c2] dark:fill-[#b2b7c2]" />
               <span className="font-semibold dark:text-gray-400">{commentCount}</span>
             </div>
           </footer>

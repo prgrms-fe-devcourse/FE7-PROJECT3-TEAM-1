@@ -36,7 +36,14 @@ export default function WriteDetail() {
   const [content, setContent] = useState("");
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [pick, setPick] = useState<"up" | "down" | "hold" | "">("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // 선택한 해시태그 저장
+  const [selectedTags, setSelectedTags] = useState<Record<"up" | "down" | "hold", string[]>>({
+    up: [],
+    down: [],
+    hold: [],
+  });
+
   const [sliderValue, setSliderValue] = useState([4]); // 현재 단계 (0~9)
   const [hadInitialImage, setHadInitialImage] = useState(false); // 초기 로드 시 이미지가 있었는지 추적
   const totalSteps = 10;
@@ -79,11 +86,18 @@ export default function WriteDetail() {
   // pick에 따라 hashtag 배열 가져오기
   const hashtags = pick === "up" ? up : pick === "down" ? down : pick === "hold" ? hold : [];
 
-  // 해시태그 클릭 시 토글 동작
+  // 해시태그 클릭 시 토글 동작 (현재 pick의 태그만 업데이트)
   const toggleTag = (tag: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
-    );
+    if (!pick || pick === undefined) return;
+    setSelectedTags((prev) => {
+      const currentTags = prev[pick] || [];
+      return {
+        ...prev,
+        [pick]: currentTags.includes(tag)
+          ? currentTags.filter((t) => t !== tag)
+          : [...currentTags, tag],
+      };
+    });
   };
 
   const imageUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -234,7 +248,7 @@ export default function WriteDetail() {
 
         if (feelError) throw feelError;
 
-        const tagString = selectedTags.join(",");
+        const tagString = selectedTags[pick].join(",");
         const { error: tagError } = await supabase
           .from("hashtags")
           .insert([{ post_id: postId, content: tagString }]);
@@ -288,7 +302,8 @@ export default function WriteDetail() {
 
         if (feelError) throw feelError;
 
-        const tagString = selectedTags.join(",");
+        // const tagString = selectedTags[pick].join(",");
+        const tagString = selectedTags[pick]?.join(",") || "";
         const { error: tagError } = await supabase
           .from("hashtags")
           .update({ post_id: postId, content: tagString })
@@ -359,16 +374,20 @@ export default function WriteDetail() {
         setSliderValue([feels.amount - 1]);
       }
 
-      if (Array.isArray(hashtags.content)) {
-        setSelectedTags(hashtags.content);
-      } else if (typeof hashtags.content === "string") {
-        setSelectedTags(
-          hashtags.content
-            .split(",")
-            .map((t) => t.trim())
-            .filter((t) => t !== ""),
-        );
-      }
+      // 수정 모드
+      const tagArray = Array.isArray(hashtags.content)
+        ? hashtags.content
+        : typeof hashtags.content === "string"
+          ? hashtags.content
+              .split(",")
+              .map((t) => t.trim())
+              .filter((t) => t !== "")
+          : [];
+
+      setSelectedTags((prev) => ({
+        ...prev,
+        [feels.type]: tagArray,
+      }));
     })();
   }, [pageId, router, supabase]);
 
@@ -392,7 +411,6 @@ export default function WriteDetail() {
               key={e.key}
               onClick={() => {
                 setPick(e.key);
-                setSelectedTags([]);
               }}
               className={`flex justify-center items-center flex-col flex-1 w-full sm:w-auto min-h-20 rounded-xl cursor-pointer transition-transform duration-200 transform hover:scale-102 py-4
                   ${
@@ -415,7 +433,7 @@ export default function WriteDetail() {
           pick ? "translate-y-6 opacity-100 dark:text-slate-300" : "translate-y-0 opacity-0"
         } dark:bg-[#141d2b]`}
       >
-        {pick ? (
+        {pick && pick !== "hold" ? (
           <div className="relative w-full flex justify-center mb-3 px-2">
             {/* 숫자 말풍선 */}
             <div
@@ -480,24 +498,30 @@ export default function WriteDetail() {
         )}
         {/* 해시태그 영역 */}
         <div className="w-full flex flex-row flex-wrap lg:justify-between gap-2 text-[#4A5565] mb-6 px-2 dark:text-slate-400">
-          {hashtags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => toggleTag(tag)}
-              className={`cursor-pointer px-3 py-1 text-xs border rounded-full transition-colors duration-150 select-none
-                    ${
-                      selectedTags.includes(tag)
-                        ? pick === "up"
-                          ? "bg-[#FF6467] text-white border-[#ff6467] dark:text-white"
-                          : pick === "down"
-                            ? "bg-[#51A2FF] text-white border-[#51A2FF] dark:text-white"
-                            : "bg-[#99A1AF] text-white border-[#99A1AF] dark:text-white"
-                        : "border-[#E5E7EB] text-[#4A5565] hover:text-black hover:bg-black/5 dark:border-slate-700 dark:bg-[#141d2b] dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700"
-                    }`}
-            >
-              #{tag}
-            </button>
-          ))}
+          {hashtags.map((tag) => {
+            // 현재 pick의 태그만 확인
+            const currentTags =
+              pick === "up" || pick === "down" || pick === "hold" ? selectedTags[pick] || [] : [];
+            const isSelected = currentTags.includes(tag);
+            return (
+              <button
+                key={tag}
+                onClick={() => toggleTag(tag)}
+                className={`cursor-pointer px-3 py-1 text-xs border rounded-full transition-colors duration-150 select-none
+                      ${
+                        isSelected
+                          ? pick === "up"
+                            ? "bg-[#FF6467] text-white border-[#ff6467] dark:text-white"
+                            : pick === "down"
+                              ? "bg-[#51A2FF] text-white border-[#51A2FF] dark:text-white"
+                              : "bg-[#99A1AF] text-white border-[#99A1AF] dark:text-white"
+                          : "border-[#E5E7EB] text-[#4A5565] hover:text-black hover:bg-black/5 dark:border-slate-700 dark:bg-[#141d2b] dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700"
+                      }`}
+              >
+                #{tag}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -509,36 +533,40 @@ export default function WriteDetail() {
           value={title}
           onChange={handleChangeTitle}
         />
-        <span className="absolute bottom-2 right-4 font-normal text-[#AAAAAA] text-sm dark:text-slate-400">
-          {title.length} / 40
-        </span>
-        {hasBadTitle ? (
-          <p className="mt-0.5 ml-2 absolute text-[#c85c5c] text-sm dark:text-slate-400">
-            적절하지 못한 제목입니다
-          </p>
-        ) : (
-          ""
-        )}
+        <div className="flex items-center justify-between mt-0.5">
+          {hasBadTitle ? (
+            <p className="ml-2 font-normal text-[#c85c5c] text-sm dark:text-[#c85c5c]">
+              적절하지 못한 제목입니다
+            </p>
+          ) : (
+            <div></div>
+          )}
+          <span className="mr-2 font-normal text-[#AAAAAA] text-sm dark:text-slate-300">
+            {title.length} / 40
+          </span>
+        </div>
       </div>
 
       {/* 메모 */}
-      <div className="relative w-full flex-1 min-h-0 outline-none focus:outline-none select-none ">
+      <div className="relative w-full flex-1 min-h-0 outline-none focus:outline-none select-none mb-4">
         <textarea
           className="bg-[#F9FAFB] border rounded-xl border-[#E5E7EB] w-full h-full min-h-60 mt-4 resize-none outline-none focus:scale-102 transform transition-transform duration-200 px-4 py-3 dark:bg-[#141d2b] dark:border-slate-700 dark:text-slate-300"
           placeholder="오늘의 메모를 남겨보세요..."
           value={content}
           onChange={handleChangeContent}
         />
-        <span className="absolute bottom-0 right-4 font-normal text-[#AAAAAA] text-sm dark:text-slate-400">
-          {content.length} / 500
-        </span>
-        {hasBadContent ? (
-          <p className="absolute ml-2 text-[#c85c5c] text-sm dark:text-slate-400">
-            적절하지 못한 내용입니다
-          </p>
-        ) : (
-          ""
-        )}
+        <div className="flex items-center justify-between mt-1">
+          {hasBadContent ? (
+            <p className="ml-2 font-normal text-[#c85c5c] text-sm dark:text-[#c85c5c]">
+              적절하지 못한 내용입니다
+            </p>
+          ) : (
+            <div></div>
+          )}
+          <span className="mr-2 font-normal text-[#AAAAAA] text-sm dark:text-slate-300">
+            {content.length} / 500
+          </span>
+        </div>
       </div>
 
       {/* 업로드된 이미지 */}
@@ -600,8 +628,17 @@ export default function WriteDetail() {
         )}
       </div>
       <button
-        className="mt-4 mb-4 flex justify-center items-center dark:text-slate-300 text-[#ffffff] w-full h-14 shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] rounded-xl bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] cursor-pointer hover:scale-101 transform transition-transform duration-150 active:scale-[.99] px-2 dark:bg-[#141d2b] dark:border-slate-700 dark:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] dark:from-[#6B8FA3] dark:to-[#7A8FB8]"
+        className="
+          mt-4 mb-4 flex justify-center items-center dark:text-slate-300 
+          text-[#ffffff] w-full h-14 shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] 
+          rounded-xl bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] cursor-pointer 
+          hover:scale-101 transform transition-transform duration-150 
+          active:scale-[.99] px-2 dark:bg-[#141d2b] dark:border-slate-700 
+          dark:shadow-[0_2px_4px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)] 
+          dark:from-[#6B8FA3] dark:to-[#7A8FB8] disabled:cursor-not-allowed disabled:hover:scale-100 disabled:opacity-50
+        "
         onClick={handlePublish}
+        disabled={!title || !content || !pick}
       >
         기록 완료
       </button>

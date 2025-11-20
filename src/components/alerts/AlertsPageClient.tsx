@@ -96,7 +96,7 @@ export default function AlertsPageClient({
       {/* 알림 리스트 */}
       <div className="overflow-hidden mt-6 border border-[#e3e3e6] rounded-2xl bg-white divide-y divide-[#f2f2f4] dark:border-slate-700 dark:bg-[#141d2b] dark:divide-slate-700 shadow-[0px_4px_12px_rgba(0,0,0,0.06)]">
         {notifications.length === 0 ? (
-          <div className="flex justify-center items-center font-bold text-[40px] py-20 dark:text-slate-300">
+          <div className="flex justify-center items-center font-bold text-xl py-20 dark:text-slate-300">
             받은 알림이 없습니다
           </div>
         ) : (
@@ -106,7 +106,7 @@ export default function AlertsPageClient({
               onClick={() => handleClick(n)}
               className={`
                 flex justify-between items-center w-full px-6 py-4 text-left transition cursor-pointer hover:opacity-80 active:scale-[.99]
-                ${n.is_read ? "bg-white dark:bg-[#141d2b]" : "bg-[#EFF6FF] dark:bg-[#141d2b]"}
+                ${n.is_read ? "bg-white dark:bg-[#141d2b]" : "bg-[#e1ecfb] dark:bg-[#353f4e]"}
               `}
             >
               {/* 왼쪽 */}

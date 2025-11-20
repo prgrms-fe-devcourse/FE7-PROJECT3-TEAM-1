@@ -23,6 +23,8 @@ import { twMerge } from "tailwind-merge";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import Button from "./Button";
 import ProfileImage from "./ProfileImage";
+import { useNotificationStore } from "@/store/alarmStore";
+import { useProfile } from "@/store/useStore";
 
 type Profile = Database["public"]["Tables"]["users"]["Row"];
 
@@ -34,6 +36,12 @@ const Icon = {
   search: ({ className }: { className?: string }) => <Search size={18} className={className} />,
   profile: ({ className }: { className?: string }) => <UserIcon size={18} className={className} />,
   bell: ({ className }: { className?: string }) => <Bell size={18} className={className} />,
+  bellDot: ({ className }: { className?: string }) => (
+    <div className="relative inline-block">
+      <Bell size={18} className={className} />
+      <div className="absolute top-0 right-0 w-2 h-2 bg-red-400 rounded-full" />
+    </div>
+  ),
   write: ({ className }: { className?: string }) => <PenTool size={18} className={className} />,
 };
 
@@ -43,14 +51,6 @@ type NavItem = {
   href: string;
   Icon: React.FC<{ className?: string }>;
 };
-
-const NAV: NavItem[] = [
-  { key: "dashboard", label: "대시보드", href: "/", Icon: Icon.dashboard },
-  { key: "community", label: "커뮤니티", href: "/community", Icon: Icon.community },
-  { key: "search", label: "검색", href: "/search", Icon: Icon.search },
-  { key: "profile", label: "프로필", href: "/profile", Icon: Icon.profile },
-  { key: "alerts", label: "알림", href: "/alerts", Icon: Icon.bell },
-];
 
 interface HeaderProps {
   // 현재 활성화된 메뉴 키 (예: 'search')
@@ -76,11 +76,35 @@ export default function Header({
 }: HeaderProps) {
   const pathname = usePathname();
 
+  const profile = useProfile();
+
+  const { fetchNotifications, unReadCount } = useNotificationStore((s) => s);
+
+  useEffect(() => {
+    if (!profile?.id) return;
+    fetchNotifications(profile.id); // async properly called
+  }, [profile?.id, fetchNotifications]);
+
   const [visible, setVisible] = useState(false);
   const { isMobile, isXl } = useBreakpoint();
 
   // SSR 프로필을 우선 사용하고, 클라이언트 사이드에서 업데이트되면 그것을 사용
   const userProfile = initialProfile || null;
+
+  const NAV = React.useMemo<NavItem[]>(() => {
+    return [
+      { key: "dashboard", label: "대시보드", href: "/", Icon: Icon.dashboard },
+      { key: "community", label: "커뮤니티", href: "/community", Icon: Icon.community },
+      { key: "search", label: "검색", href: "/search", Icon: Icon.search },
+      { key: "profile", label: "프로필", href: "/profile", Icon: Icon.profile },
+      {
+        key: "alerts",
+        label: "알림",
+        href: "/alerts",
+        Icon: unReadCount > 0 ? Icon.bellDot : Icon.bell,
+      },
+    ];
+  }, [unReadCount]);
 
   const computedActiveKey = React.useMemo(() => {
     // 글 작성 시 Header 탭 커뮤니티 활성화
@@ -96,7 +120,7 @@ export default function Header({
       }
     }
     return activeKey;
-  }, [pathname, activeKey]);
+  }, [pathname, activeKey, NAV]);
 
   const [isDark, setIsDark] = useState(false);
 
@@ -201,7 +225,7 @@ export default function Header({
                   {todayScore.value.toLocaleString()}
                 </span>
                 <span
-                  className={`inline-flex shrink-0 items-center gap-1 rounded-lg font-semibold backdrop-blur bg-transparent px-0 py-0 text-[14px] ${
+                  className={`mb-0.5 inline-flex shrink-0 ite ms-center gap-1 rounded-lg font-semibold backdrop-blur bg-transparent px-0 py-0 text-[14px] ${
                     todayScore.finalResult >= 0 ? "text-emerald-500" : "text-rose-500"
                   }`}
                 >

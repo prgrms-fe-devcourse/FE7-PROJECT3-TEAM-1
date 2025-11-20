@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition, useState } from "react";
+import { useRouter } from "next/navigation";
 import ProfileImage from "@/components/common/ProfileImage";
 import { followToggle } from "@/app/(seperate-page)/profile/[userId]/parts/actions";
 import type { SearchUser } from "./types";
@@ -12,10 +13,20 @@ type SearchUserWithFollow = SearchUser & {
 };
 
 export default function SearchUserItem({ user }: { user: SearchUserWithFollow }) {
+  const router = useRouter();
+
   const [followPending, startFollow] = useTransition();
   const [following, setFollowing] = useState<boolean>(!!user.isFollowing);
 
-  const handleFollowToggle = () => {
+  // 카드 전체 클릭 시 프로필 페이지로 이동
+  const handleCardClick = () => {
+    router.push(`/profile/${user.id}`);
+  };
+
+  const handleFollowToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // 팔로우 버튼 클릭 시, 카드 클릭 이벤트 막기
+    e.stopPropagation();
+
     // 내 계정이거나, 이미 처리 중이면 막기
     if (followPending || user.isMe) return;
 
@@ -34,7 +45,10 @@ export default function SearchUserItem({ user }: { user: SearchUserWithFollow })
   };
 
   return (
-    <article className="p-5 rounded-2xl bg-white border border-slate-200 shadow-[0_4px_12px_rgba(15,23,42,0.04)] flex gap-3 items-center dark:bg-[#141d2b] dark:border-[#364153]">
+    <article
+      onClick={handleCardClick} // 카드 클릭 시 프로필로
+      className="p-5 rounded-2xl bg-white border border-slate-200 shadow-[0_4px_12px_rgba(15,23,42,0.04)] flex gap-3 items-center dark:bg-[#141d2b] dark:border-[#364153] cursor-pointer"
+    >
       <ProfileImage displayName={user.display_name} imageUrl={user.image_url} />
 
       <div className="flex-1 min-w-0">
@@ -50,9 +64,9 @@ export default function SearchUserItem({ user }: { user: SearchUserWithFollow })
       {!user.isMe && (
         <button
           type="button"
-          onClick={handleFollowToggle}
+          onClick={handleFollowToggle} // 이벤트 객체 넘어옴
           disabled={followPending}
-          className="px-4 py-1.5 rounded-full bg-gradient-to-r from-[#A8E0FF] to-[#C5C8FF] text-white text-sm font-semibold hover:opacity-90 active:scale-[.99] transition cursor-pointer disabled:opacity-70 disabled:cursor-default"
+          className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] dark:from-[#6B8FA3] dark:to-[#7A8FB8] text-white text-sm font-semibold hover:opacity-90 active:scale-[.99] transition cursor-pointer disabled:opacity-70 disabled:cursor-default"
         >
           {followPending ? "처리 중..." : following ? "언팔로우" : "팔로우"}
         </button>

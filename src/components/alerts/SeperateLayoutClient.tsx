@@ -14,12 +14,17 @@ export default function SeperateLayoutClient({
   todayScore: { value: number; finalResult: number };
 }) {
   return (
-    <div className="flex min-w-full min-h-screen">
+    <div className="flex min-w-full h-screen overflow-hidden">
       {/*  전역 실시간 알림 Provider */}
       <AlarmProvider />
 
       <Header initialProfile={userProfile} todayScore={todayScore} />
-      <main className="flex-1 p-6 pt-25 xl:pt-6 overflow-y-auto">{children}</main>
+      <main
+        id="main-scroll-container"
+        className="flex-1 p-6 pt-25 xl:pt-6 overflow-y-auto overscroll-y-none"
+      >
+        {children}
+      </main>
     </div>
   );
 }

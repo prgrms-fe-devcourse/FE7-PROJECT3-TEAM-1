@@ -11,13 +11,15 @@ type HashtagRow = Tables<"hashtags">;
 
 export type PostWithTags = PostRow & {
   hashtags?: Pick<HashtagRow, "content">[] | null;
-
   likes?: { user_id: string }[] | null;
+  post_type?: string | null;
 };
 
 export default async function ProfilePage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId: profileUserId } = await params;
   const supabase = await createClient();
+
+  // console.log("profileUserId", profileUserId);
 
   const {
     data: { user: me },
@@ -31,7 +33,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
     .maybeSingle();
 
   if (!profile) {
-    // console.error("[profile] select error:", profileErr);
+    console.error("[profile] select error:", profileErr);
     notFound();
   }
 
@@ -68,7 +70,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
 
     supabase
       .from("feels")
-      .select("type, amount, created_at")
+      .select("type, amount, created_at, post_id")
       .eq("user_id", profileUserId)
       .order("created_at", { ascending: true }),
 
@@ -124,7 +126,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
 
   const chartRaw: ChartDataPoint[] = aggregateFeelsToChartData(feels ?? []);
 
-  const hasRealData = chartRaw.length > 0;
+  // 실제 데이터가 있는지 확인 (모든 값이 0이 아닌지 체크)
+  // chartRaw는 항상 7개의 데이터를 반환하므로, 실제 데이터 존재 여부를 값으로 확인
+  const hasRealData = chartRaw.some((point) => point.up > 0 || point.down > 0 || point.hold > 0);
 
   const preview: ChartDataPoint[] = Array.from({ length: 7 }).map((_, i) => {
     const d = new Date();
@@ -133,15 +137,32 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
       date: d.toISOString(),
       day: d.getDate(),
       weekday: ["일", "월", "화", "수", "목", "금", "토"][d.getDay()],
-      up: [2, 0, 1, 3, 0, 2, 4][i],
-      hold: [0, 1, 0, 0, 1, 0, 0][i],
-      down: [0, 2, 0, 0, 3, 0, 0][i],
+      up: [0, 0, 0, 0, 0, 0, 0][i],
+      hold: [0, 0, 0, 0, 0, 0, 0][i],
+      down: [0, 0, 0, 0, 0, 0, 0][i],
     };
   });
 
   const chartData = hasRealData ? chartRaw : preview;
 
-  const writtenPosts: PostWithTags[] = (writtenPostsRaw ?? []) as PostWithTags[];
+  // feels 데이터를 post_id별로 매핑
+  const feelsByPostId = new Map<string, string>();
+  if (feels && Array.isArray(feels)) {
+    for (const feel of feels) {
+      if (feel && feel.post_id && feel.type) {
+        feelsByPostId.set(feel.post_id, feel.type);
+      }
+    }
+  }
+
+  // writtenPostsRaw에 post_type 추가
+  const writtenPosts: PostWithTags[] = ((writtenPostsRaw ?? []) as PostWithTags[]).map((post) => {
+    const postType = post?.id ? feelsByPostId.get(post.id) || null : null;
+    return {
+      ...post,
+      post_type: postType,
+    };
+  });
 
   const viewedPosts: PostWithTags[] = (() => {
     const rows = (viewedRowsRaw ?? []) as { posts: PostWithTags | null }[];
@@ -160,7 +181,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
     return acc;
   })();
 
-  console.log("writtenPostsRaw", writtenPostsRaw);
+  // console.log("writtenPosts (with post_type):", writtenPosts);
   return (
     <div className="w-full space-y-6">
       <section className="rounded-2xl bg-white p-6 shadow-sm border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">
@@ -184,7 +205,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
         <ProfileChart chartData={chartData} hasRealData={hasRealData} />
       </section>
 
-      <ProfilePosts written={writtenPosts} viewed={viewedPosts} />
+      <ProfilePosts written={writtenPosts} viewed={viewedPosts} isMe={isMe} />
     </div>
   );
 }
@@ -192,12 +213,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
 function aggregateFeelsToChartData(
   rows: Array<{ type: string; amount: number | null; created_at: string }>,
 ): ChartDataPoint[] {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const dateRange: Date[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    dateRange.push(date);
+  }
+
+  // 실제 데이터를 날짜별로 집계
   const byDate = new Map<string, { up: number; down: number; hold: number }>();
 
   for (const r of rows) {
     const d = new Date(r.created_at);
     d.setHours(0, 0, 0, 0);
     const key = d.toISOString();
+
+    // 최근 7일 실제 데이터 처리
+    const dateInRange = dateRange.some((rangeDate) => rangeDate.getTime() === d.getTime());
+    if (!dateInRange) continue;
 
     const bucket = byDate.get(key) ?? { up: 0, down: 0, hold: 0 };
     const rawAmt = typeof r.amount === "number" ? r.amount : 1;
@@ -218,17 +254,17 @@ function aggregateFeelsToChartData(
     byDate.set(key, bucket);
   }
 
-  return Array.from(byDate.entries())
-    .sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime())
-    .map(([iso, v]) => {
-      const d = new Date(iso);
-      return {
-        date: iso,
-        day: d.getDate(),
-        weekday: ["일", "월", "화", "수", "목", "금", "토"][d.getDay()],
-        up: v.up,
-        down: v.down,
-        hold: v.hold,
-      } satisfies ChartDataPoint;
-    });
+  return dateRange.map((date) => {
+    const key = date.toISOString();
+    const data = byDate.get(key) ?? { up: 0, down: 0, hold: 0 };
+
+    return {
+      date: key,
+      day: date.getDate(),
+      weekday: ["일", "월", "화", "수", "목", "금", "토"][date.getDay()],
+      up: data.up,
+      down: data.down,
+      hold: data.hold,
+    } satisfies ChartDataPoint;
+  });
 }

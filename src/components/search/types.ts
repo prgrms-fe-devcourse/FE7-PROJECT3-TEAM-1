@@ -25,6 +25,7 @@ export interface CommunityPost {
   }[];
   // 현재 로그인한 유저 기준으로, 내가 좋아요를 눌렀는지 여부
   is_liked_by_me: boolean;
+  user_id: string; // 이 줄 추가
 }
 
 export type SearchUser = {
