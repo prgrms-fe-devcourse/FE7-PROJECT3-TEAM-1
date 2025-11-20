@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import ProfileImage from "@/components/common/ProfileImage";
 import { followToggle } from "@/app/(seperate-page)/profile/[userId]/parts/actions";
 import type { SearchUser } from "./types";
+import { useIsLoggedIn } from "@/store/useStore";
 
 // 기존 SearchUser 타입에 팔로우 관련 필드를 확장해서 사용
 type SearchUserWithFollow = SearchUser & {
@@ -14,7 +15,7 @@ type SearchUserWithFollow = SearchUser & {
 
 export default function SearchUserItem({ user }: { user: SearchUserWithFollow }) {
   const router = useRouter();
-
+  const isLoggedIn = useIsLoggedIn();
   const [followPending, startFollow] = useTransition();
   const [following, setFollowing] = useState<boolean>(!!user.isFollowing);
 
@@ -65,8 +66,8 @@ export default function SearchUserItem({ user }: { user: SearchUserWithFollow })
         <button
           type="button"
           onClick={handleFollowToggle} // 이벤트 객체 넘어옴
-          disabled={followPending}
-          className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] dark:from-[#6B8FA3] dark:to-[#7A8FB8] text-white text-sm font-semibold hover:opacity-90 active:scale-[.99] transition cursor-pointer disabled:opacity-70 disabled:cursor-default"
+          disabled={followPending || !isLoggedIn}
+          className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#A8E0FF] to-[#C5C8FF] dark:from-[#6B8FA3] dark:to-[#7A8FB8] text-white text-sm font-semibold hover:opacity-90 active:scale-[.99] transition cursor-pointer disabled:cursor-not-allowed disabled:hover:scale-100 disabled:opacity-50"
         >
           {followPending ? "처리 중..." : following ? "언팔로우" : "팔로우"}
         </button>
