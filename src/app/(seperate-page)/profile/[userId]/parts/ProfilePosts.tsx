@@ -98,9 +98,7 @@ export default function ProfilePosts({ written, viewed, isMe }: Props) {
           scrollableTarget="main-scroll-container"
           scrollThreshold={0.95}
           loader={
-            <p className="text-center text-slate-400 py-4 dark:text-slate-500">
-              불러오는 중…
-            </p>
+            <p className="text-center text-slate-400 py-4 dark:text-slate-500">불러오는 중…</p>
           }
           // endMessage={
           //   <p className="text-center text-slate-400 py-4 dark:text-slate-500">

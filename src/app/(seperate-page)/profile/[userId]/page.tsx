@@ -11,8 +11,8 @@ type HashtagRow = Tables<"hashtags">;
 
 export type PostWithTags = PostRow & {
   hashtags?: Pick<HashtagRow, "content">[] | null;
-
   likes?: { user_id: string }[] | null;
+  post_type?: string | null;
 };
 
 export default async function ProfilePage({ params }: { params: Promise<{ userId: string }> }) {
@@ -70,7 +70,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
 
     supabase
       .from("feels")
-      .select("type, amount, created_at")
+      .select("type, amount, created_at, post_id")
       .eq("user_id", profileUserId)
       .order("created_at", { ascending: true }),
 
@@ -145,7 +145,24 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
 
   const chartData = hasRealData ? chartRaw : preview;
 
-  const writtenPosts: PostWithTags[] = (writtenPostsRaw ?? []) as PostWithTags[];
+  // feels 데이터를 post_id별로 매핑
+  const feelsByPostId = new Map<string, string>();
+  if (feels && Array.isArray(feels)) {
+    for (const feel of feels) {
+      if (feel && feel.post_id && feel.type) {
+        feelsByPostId.set(feel.post_id, feel.type);
+      }
+    }
+  }
+
+  // writtenPostsRaw에 post_type 추가
+  const writtenPosts: PostWithTags[] = ((writtenPostsRaw ?? []) as PostWithTags[]).map((post) => {
+    const postType = post?.id ? feelsByPostId.get(post.id) || null : null;
+    return {
+      ...post,
+      post_type: postType,
+    };
+  });
 
   const viewedPosts: PostWithTags[] = (() => {
     const rows = (viewedRowsRaw ?? []) as { posts: PostWithTags | null }[];
@@ -164,7 +181,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
     return acc;
   })();
 
-  console.log("writtenPostsRaw", writtenPostsRaw);
+  // console.log("writtenPosts (with post_type):", writtenPosts);
   return (
     <div className="w-full space-y-6">
       <section className="rounded-2xl bg-white p-6 shadow-sm border border-slate-200 dark:bg-[#141d2b] dark:border-[#364153]">
@@ -188,7 +205,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userId
         <ProfileChart chartData={chartData} hasRealData={hasRealData} />
       </section>
 
-      <ProfilePosts written={writtenPosts} viewed={viewedPosts} isMe={isMe}/>
+      <ProfilePosts written={writtenPosts} viewed={viewedPosts} isMe={isMe} />
     </div>
   );
 }
