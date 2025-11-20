@@ -5,7 +5,7 @@ export default function WritePage() {
   return (
     <>
       <Suspense fallback={<div className="flex justify-center items-center">로딩중 ...</div>}>
-        <div className="w-full h-full">
+        <div className="w-full min-h-full">
           <WriteDetail />
         </div>
       </Suspense>
