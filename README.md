@@ -1,7 +1,7 @@
 
 <p align="center">
   <a href="https://fe-7-project-3-team-1.vercel.app/" target="_blank">
-    <img width="280" height="103" alt="image" src="https://github.com/user-attachments/assets/ef9ecc0e-f272-4d0a-b11f-83c9c6c86e1f" />
+    <img width="280" height="103" alt="image" src="https://github.com/user-attachments/assets/66ed6944-099c-4c74-91c5-dc41a3ba6166" />
   </a>
 </p>
 
